@@ -29,14 +29,16 @@ public class SolytronService {
 		this.categories = reader.getSolytronCategories();
 	}
 	
-	public List<SolytronProduct> getCategoryFullProducts(String id){
-		List<SolytronProduct> solytronProducts = getCategoryStockProducts(id);
-		int productCounter = 0;
-		List<SolytronProduct> productsNew = new ArrayList<SolytronProduct>();
+	public List<SolytronProduct> getCategoryFullProducts(String category){
+		List<SolytronProduct> solytronProducts = getCategoryStockProducts(categories.get(category));
 		System.out.println(solytronProducts.size());
+		List<SolytronProduct> productsNew = new ArrayList<SolytronProduct>();
 		HashMap<Integer, String> tabletProperties = new HashMap<Integer, String>();
 		HashMap<Integer, String> tabletPropertiesValues = new HashMap<Integer, String>();
 		HashMap<Integer, String> tabletValues = new HashMap<Integer, String>();
+
+		int productCounter = 0;
+		
 		for(SolytronProduct productSimple : solytronProducts){
 			productCounter++;
 //			if(productCounter < 133){
@@ -98,5 +100,9 @@ public class SolytronService {
 		
 		
 		return solytronProducts;
+	}
+	
+	public List<> getProductPhotos(SolytronProduct solytronProduct){
+		
 	}
 }

@@ -5,10 +5,11 @@ public class Result {
 	private int sequenceNumber;
 	private String id;
 	private String name;
-	private int totalTime;
+	private long totalTime;
 	private int successfullUploadedPhotos;
 	private int photos;
 	private int magentoUploadStatus;
+	
 	public int getSequenceNumber() {
 		return sequenceNumber;
 	}
@@ -27,10 +28,10 @@ public class Result {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getTotalTime() {
+	public long getTotalTime() {
 		return totalTime;
 	}
-	public void setTotalTime(int totalTime) {
+	public void setTotalTime(long totalTime) {
 		this.totalTime = totalTime;
 	}
 	public int getSuccessfullUploadedPhotos() {

@@ -112,15 +112,6 @@ public class FieldManipulationHelper {
 		return st.toString();
 	}
 	
-	public MagentoProductRequest generateCategories(MagentoProductRequest product, List<Integer> categories) {
-		List<String> stringCategories = new ArrayList<>();
-		for(Integer cat : categories){
-			stringCategories.add(String.valueOf(cat));
-		}
-		product.getCustomAttributes().add(newKeyListAttribute("categories", stringCategories));
-		return product;
-	}
-
 	public String trimName(String name, int spaces) {
 		StringBuilder st = new StringBuilder();
 		name = name.replace("NB", "");
@@ -130,7 +121,7 @@ public class FieldManipulationHelper {
 		name = name.replace("Mobile workstation","");
 		name = name.replace("Ultrabook", "");
 		name = name.replace("РАЗПРОДАЖБА!", "");
-		name = name.replace("PROMO!  ", "");
+		name = name.replace("PROMO!", "");
 		name = name.replace("&quot", "");
 		name = name.replace("\"", "");
 		name = name.trim();
@@ -285,7 +276,7 @@ public class FieldManipulationHelper {
 		return magentoAttributesReversed.get("Intel Core i3");
 	}
 
-	public List<String> generateYesNo(String bluetooth, String camera, String ssd, String ssd2, String reader, String fingerprint, String hdmi, 
+	public List<String> generateLaptopYesNo(String bluetooth, String camera, String ssd, String ssd2, String reader, String fingerprint, String hdmi, 
 			String hdmi2, String onelink, String usb3, String rj45, String sensorscreen, String usbc){
 		List<String> list = new ArrayList<String>();
 		if(bluetooth != null && !bluetooth.contains("No")){

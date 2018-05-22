@@ -1,7 +1,10 @@
 package bg.premiummobile.productimporter.httpclients;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +13,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.StatusLine;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -18,6 +24,7 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
+import org.imgscalr.Scalr;
 import org.simpleframework.xml.Serializer;
 import org.simpleframework.xml.core.Persister;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +44,9 @@ import bg.premiummobile.productimporter.magento.domain.MagentoProduct;
 import bg.premiummobile.productimporter.magento.domain.MagentoProductRequest;
 import bg.premiummobile.productimporter.magento.domain.MagentoProductResponse;
 import bg.premiummobile.productimporter.magento.domain.MagentoSiteMapXML;
+import bg.premiummobile.productimporter.magento.domain.MediaGalleryContent;
+import bg.premiummobile.productimporter.magento.domain.MediaGalleryEntry;
+import bg.premiummobile.productimporter.magento.domain.MediaGalleryEntryWrapper;
 import bg.premiummobile.productimporter.magento.domain.Option;
 import bg.premiummobile.productimporter.magento.domain.ProductLink;
 import bg.premiummobile.productimporter.magento.domain.TierPrice;
@@ -222,11 +232,11 @@ public class Magento2Client {
 		return result;
 	}
 	
-	public void updateMagentoStockInfo(StockInfoProduct stockInfoProduct) throws Exception {
-		this.updateMagentoProduct(stockInfoProduct);
+	public StatusLine updateProductStockInfo(StockInfoProduct stockInfoProduct) throws Exception {
+		return this.updateMagentoProduct(stockInfoProduct);
 	}
 	
-	public MagentoProductResponse getMagentoProduct(String sku) throws Exception {
+	public MagentoProductResponse getProduct(String sku) throws Exception {
 		HttpGet httpGet = new HttpGet(urlBuilder(magentoProperties.get("product") + "/" + sku));
 		httpGet.addHeader("Authorization", "Bearer " + magentoToken());
 		CloseableHttpResponse response = client.getClient().execute(httpGet);
@@ -239,7 +249,7 @@ public class Magento2Client {
 		return null;
 	}
 	
-	public MagentoSiteMapXML getMagentoSitemap() throws Exception{
+	public MagentoSiteMapXML getSitemap() throws Exception{
 		HttpGet httpGet = new HttpGet(urlBuilder(magentoProperties.get("host") + "/" + magentoProperties.get("siteMapUri")));
 		CloseableHttpResponse response = client.getClient().execute(httpGet);
 		MagentoSiteMapXML siteMap = getSerializer().read(MagentoSiteMapXML.class, response.getEntity().getContent());
@@ -288,4 +298,66 @@ public class Magento2Client {
 		return itemResponse.getAttributes();
 	}
 	
+	public StatusLine uploadMagentoImage(MagentoProductRequest product, String imageUrl, int counter, String provider) throws Exception{
+		URL url = new URL(imageUrl);
+		BufferedImage img = ImageIO.read(url);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		
+		String extension;
+		if(imageUrl.contains("png")){
+			extension = "png";
+		}
+		else{
+			extension = "jpeg";
+		}
+		String imageName = product.getSku() + counter + "." + extension;
+		
+		MediaGalleryEntry entry = new MediaGalleryEntry();
+        entry.setMediaType("image");
+        entry.setDisabled(false);
+        entry.setLabel(product.getName() + " на топ цена и на изплащане от Примиъм Мобайл ЕООД");
+        entry.setPosition(counter);
+        entry.setFileName(provider + "/" + imageName);
+
+        ArrayList<String> types = new ArrayList<String>();
+        if( counter == 1 ){
+        	types.add("base");
+        	types.add("small_image");
+        	types.add("thumbnail");
+        }
+        entry.setTypes(types);
+        
+        MediaGalleryContent content = new MediaGalleryContent();
+        if(img.getHeight() > 1200 || img.getWidth() > 1200){
+        	BufferedImage scaledImage = Scalr.resize(img, 1200, 1200);
+        	ImageIO.write(scaledImage, extension, baos);
+        }
+        else{
+        	ImageIO.write(img, extension, baos);
+        }
+		content.setName(imageName);
+		content.setType("image/" + extension);
+		content.setData(new String(Base64.encodeBase64(baos.toByteArray())));
+		
+		entry.setContent(content);
+		
+		MediaGalleryEntryWrapper wrapper = new MediaGalleryEntryWrapper();
+		wrapper.setEntry(entry);
+		
+		StringEntity params = new StringEntity(om.writeValueAsString(wrapper), "UTF-8");
+		
+		HttpPost httpPost = new HttpPost(urlBuilder(magentoProperties.get("product") + "/" + product.getSku() + "/media"));
+		httpPost.addHeader("Authorization", "Bearer " + magentoToken());
+		httpPost.addHeader("Content-Type", "application/json");
+		httpPost.setEntity(params);
+		
+		CloseableHttpResponse response = client.getClient().execute(httpPost);
+		
+		System.out.println("---->Image Upload Status: " + response.getStatusLine().getStatusCode());
+		
+		baos.close();
+		response.close();
+		
+		return response.getStatusLine();
+	}
 }
