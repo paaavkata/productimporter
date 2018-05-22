@@ -68,6 +68,7 @@ public class ConfigurationReader {
 		this.magentoCategoriesMap = load(magentoCategories);
 	}
 	
+
 	public HashMap<String, String> getSolytronLaptop(){
 		return solytronLaptopMap;
 	}

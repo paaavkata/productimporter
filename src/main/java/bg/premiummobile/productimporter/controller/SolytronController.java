@@ -1,5 +1,6 @@
 package bg.premiummobile.productimporter.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,23 +34,35 @@ public class SolytronController {
 	@Autowired
 	private ConfigurationReader reader;
 	
-	private HashMap<String, List<Integer>> magentoCategories;
+	private HashMap<String, String> magentoCategories;
+	
+	private HashMap<String, String> solytronCategories;
 	
 	private HashMap<String, StockInfoProduct> stockInfoProducts;
 	
 	public SolytronController(){
-		this.magentoCategories = reader.getSolytronCategoriesToMagentoCategories();
+		this.magentoCategories = reader.getMagentoCategories();
+		this.solytronCategories = reader.getSolytronCategories();
 		this.stockInfoProducts = reader.loadStockInfoProducts();
 	}
 	
 	@GetMapping("/importCategoryToMagento/{categoryId}/")
 	@ResponseBody
 	public List<Result> downloadAndImportCategory(@PathVariable("categoryId") String category){
-		List<SolytronProduct> solytronProducts = solytronService.getCategoryFullProducts(category);
-		List<Integer> magentoCategories = magentoCategories.get(category);
+		List<SolytronProduct> solytronProducts = solytronService.getCategoryFullProducts(solytronCategories.get(category));
+		List<Integer> magentoCategoriesInner = new ArrayList<>();
+		magentoCategoriesInner.add(Integer.valueOf(magentoCategories.get("main")));
+		if("laptop".equals(category)){
+			magentoCategoriesInner.add(Integer.valueOf(magentoCategories.get("laptops")));
+		}
+		else if("tablet".equals(category)){
+			magentoCategoriesInner.add(Integer.valueOf(magentoCategories.get("tablets")));
+		}
+		else if("accessory".equals(category)){
+			magentoCategoriesInner.add(Integer.valueOf(magentoCategories.get("accessory")));
+		}
 		for(SolytronProduct solytronProduct : solytronProducts){
-			MagentoProductRequest magentoProduct = mapper.mapSolytronProduct(solytronProduct, magentoCategories);
-			magentoService.
+			MagentoProductRequest magentoProduct = mapper.mapSolytronProduct(solytronProduct, category, magentoCategoriesInner);
 		}
 	}
 }
