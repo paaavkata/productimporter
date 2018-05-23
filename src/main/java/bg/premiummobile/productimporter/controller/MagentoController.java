@@ -9,7 +9,9 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import bg.premiummobile.productimporter.configuration.HttpClient;
@@ -18,7 +20,8 @@ import bg.premiummobile.productimporter.magento.domain.MagentoAttribute;
 import bg.premiummobile.productimporter.magento.domain.MagentoSiteMapUrlXML;
 import bg.premiummobile.productimporter.magento.domain.MagentoSiteMapXML;
 
-
+@Controller
+@RequestMapping("/magento")
 public class MagentoController {
 	
 //	@Autowired
@@ -41,7 +44,7 @@ public class MagentoController {
 	@ResponseBody
 	public List<HashMap<String, String>> warmPremiumMobileCache() throws Exception{
 		List<HashMap<String, String>> responses = new ArrayList<HashMap<String, String>>();
-		MagentoSiteMapXML siteMap = magentoClient.getMagentoSitemap();
+		MagentoSiteMapXML siteMap = magentoClient.getSitemap();
 		HashMap<String, String> error503 = new HashMap<String, String>();
 		HashMap<String, String> error404 = new HashMap<String, String>();
 		HashMap<String, String> error502 = new HashMap<String, String>();

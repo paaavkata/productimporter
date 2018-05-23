@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.StatusLine;
-import org.apache.tomcat.jni.Time;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,25 +24,27 @@ import bg.premiummobile.productimporter.solytron.model.Image;
 import bg.premiummobile.productimporter.solytron.model.SolytronProduct;
 
 @RestController
+@RequestMapping("/solytron")
 public class SolytronController {
 
-	@Autowired
 	private SolytronService solytronService;
 	
-	@Autowired
 	private MagentoService magentoService;
 	
-	@Autowired
 	private SolytronToMagentoMapper mapper;
 	
-	@Autowired
 	private ConfigurationReader reader;
 	
 	private HashMap<String, String> magentoCategories;
 	
 	private HashMap<String, String> solytronCategories;
 	
-	public SolytronController(){
+	@Autowired
+	public SolytronController(ConfigurationReader reader, SolytronToMagentoMapper mapper, MagentoService magentoService, SolytronService solytronService){
+		this.reader = reader;
+		this.mapper = mapper;
+		this.solytronService = solytronService;
+		this.magentoService = magentoService;
 		this.magentoCategories = reader.getMagentoCategories();
 		this.solytronCategories = reader.getSolytronCategories();
 	}
@@ -75,7 +77,7 @@ public class SolytronController {
 				magentoService.updateMagentoProductStockInfo(stockInfo);
 			}
 			else {
-				long startTime = Time.now();
+				long startTime = System.currentTimeMillis();
 				Result result = new Result();
 				MagentoProductRequest magentoProduct = mapper.mapSolytronProduct(solytronProduct, category, magentoCategoriesInner);
 				result.setId(magentoProduct.getSku());
@@ -100,7 +102,7 @@ public class SolytronController {
 						result.setSuccessfullUploadedPhotos(success);
 					}
 				}
-				result.setTotalTime(Time.now() - startTime);
+				result.setTotalTime(System.currentTimeMillis() - startTime);
 				results.add(result);
 			}
 		}

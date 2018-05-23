@@ -56,7 +56,7 @@ public class SolytronToMagentoMapper {
 		}
 		
 		String displaySize = helper.generateDisplaySize(propertiesMap.remove(1));
-		String hdd = helper.generateHddSize(propertiesMap.remove(11));
+		String hdd = helper.generateHddSize(propertiesMap.get(11));
 		String cpu = helper.generateCpuFilter(propertiesMap.remove(55), propertiesMap.get(2));
 		String battery = propertiesMap.get(43) != null ? propertiesMap.remove(43) : "" + propertiesMap.get(44) != null ? " " + propertiesMap.remove(44) : "";
 		String ram = helper.generateRamFilter(propertiesMap.remove(5));
@@ -106,61 +106,61 @@ public class SolytronToMagentoMapper {
 		List<Property> productProperties2 = new ArrayList<Property>(properties.values());
 		for(Property property : properties.values()){
 			if(property.getPropertyId() == 18){
-				properties.remove(18);
+				propertiesMap.remove(18);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 29){
-				properties.remove(29);
+				propertiesMap.remove(29);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 41){
-				properties.remove(41);
+				propertiesMap.remove(41);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 42){
-				properties.remove(42);
+				propertiesMap.remove(42);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 53){
-				properties.remove(53);
+				propertiesMap.remove(53);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 61){
-				properties.remove(61);
+				propertiesMap.remove(61);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 62){
-				properties.remove(62);
+				propertiesMap.remove(62);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 24){
-				properties.remove(24);
+				propertiesMap.remove(24);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 28){
-				properties.remove(28);
+				propertiesMap.remove(28);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
 			}
 			if(property.getPropertyId() == 29){
-				properties.remove(28);
+				propertiesMap.remove(28);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
 				continue;
@@ -372,6 +372,7 @@ public class SolytronToMagentoMapper {
 		magentoProduct.setSku(sku);
 		magentoProduct.setPrice(generatePrice(product));
 		magentoProduct.setTypeId("simple");
+		magentoProduct.setName(product.getName());
 		
 		if(!magentoProduct.getName().toLowerCase().contains(product.getVendor().toLowerCase())){
 			magentoProduct.setName(product.getVendor() + " " + magentoProduct.getName());

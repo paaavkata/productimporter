@@ -430,8 +430,4 @@ public class FieldManipulationHelper {
 		return magentoAttributesReversed.get("401-600 GB");
 	}
 
-	public List<Attribute> generateTabletAttributes(HashMap<Integer, Property> list) {
-		
-		return customAttributes;
-	}
 }

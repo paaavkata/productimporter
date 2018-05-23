@@ -250,7 +250,7 @@ public class Magento2Client {
 	}
 	
 	public MagentoSiteMapXML getSitemap() throws Exception{
-		HttpGet httpGet = new HttpGet(urlBuilder(magentoProperties.get("host") + "/" + magentoProperties.get("siteMapUri")));
+		HttpGet httpGet = new HttpGet(urlBuilder(magentoProperties.get("siteMapUri")));
 		CloseableHttpResponse response = client.getClient().execute(httpGet);
 		MagentoSiteMapXML siteMap = getSerializer().read(MagentoSiteMapXML.class, response.getEntity().getContent());
 		return siteMap;

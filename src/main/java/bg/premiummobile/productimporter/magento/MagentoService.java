@@ -18,15 +18,16 @@ import bg.premiummobile.productimporter.magento.domain.MagentoProductRequest;
 @Service
 public class MagentoService {
 
-	@Autowired
 	private Magento2Client magentoClient;
 	
-	@Autowired
 	private ConfigurationReader reader;
 	
 	private HashMap<String, StockInfoProduct> stockInfo;
 	
-	public MagentoService() {
+	@Autowired
+	public MagentoService(ConfigurationReader reader, Magento2Client magentoClient) {
+		this.magentoClient = magentoClient;
+		this.reader = reader;
 		this.stockInfo = reader.loadStockInfoProducts();
 	}
 	
