@@ -11,7 +11,6 @@ import bg.premiummobile.productimporter.configuration.ConfigurationReader;
 import bg.premiummobile.productimporter.magento.model.Attribute;
 import bg.premiummobile.productimporter.magento.model.KeyListAttribute;
 import bg.premiummobile.productimporter.magento.model.KeyValueAttribute;
-import bg.premiummobile.productimporter.magento.model.MagentoProductRequest;
 import bg.premiummobile.productimporter.solytron.model.Property;
 
 
@@ -26,12 +25,15 @@ public class FieldManipulationHelper {
 	
 	private HashMap<String, String> magentoAttributesReversed;
 	
+	private HashMap<String, String> magentoAttributes;
+	
 	@Autowired
 	public FieldManipulationHelper(ConfigurationReader reader){
 		this.reader = reader;
 		this.brands = reader.getBrands();
 		this.colors = reader.getColors();
 		this.magentoAttributesReversed = reader.getMagentoAttributesReversed();
+		this.magentoAttributes = reader.getMagentoAttributes();
 	}
 	
 	
@@ -58,11 +60,9 @@ public class FieldManipulationHelper {
 		return attribute;
 	}
 	
-	public String generateMetaTitle(String name, String sku, boolean leasable){
+	public String generateMetaTitle(String name, boolean leasable){
 		StringBuilder st = new StringBuilder();
 		st.append(name);
-		st.append(" ");
-		st.append(sku);
 		if(leasable){
 			st.append(" на топ цена и на изплащане от Примиъм Мобайл ЕООД - ревю, мнения, характеристики");
 		}
@@ -72,12 +72,10 @@ public class FieldManipulationHelper {
 		return st.toString();
 	}
 	
-	public String generateMetaDescription(String name, String sku, boolean leasable){
+	public String generateMetaDescription(String name, boolean leasable){
 		StringBuilder st = new StringBuilder();
 		st.append("Купете днес ");
 		st.append(name);
-		st.append(" ");
-		st.append(sku);
 		if(leasable){
 			st.append(" на изплащане и на супер цена с минимално оскъпяване и светкавично одобрение от PremiumMobile.bg. Бърза доставка на следващия ден и любезно обслужване.");
 		}
@@ -87,23 +85,23 @@ public class FieldManipulationHelper {
 		return st.toString();
 	}
 	
-	public String generateUrl(String name, String sku, boolean leasable){
+	public String generateUrl(String name, boolean leasable){
 		if(leasable){
-			return name + "-cena-na-izplashtane" + "-" + sku;
+			return name + "-cena-na-izplashtane";
 		}
 		else{
-			return name + "-cena-za-bulgaria" + "-" + sku;
+			return name + "-cena-bulgaria";
 		}
 	}
 	
 	public String generateShortDescription(String displaySize, String cpu, String ram, String hdd, String battery) {
 		StringBuilder st = new StringBuilder();
 		st.append("<ul class=\"short-description-list smartphone\"><div class=\"row\"><div class=\"col-md-2 col-md-offset-1\"><li class=\"display-size\">");
-		st.append(magentoAttributesReversed.get(displaySize));
+		st.append(magentoAttributes.get(displaySize));
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"processor\">");
-		st.append(magentoAttributesReversed.get(cpu));
+		st.append(magentoAttributes.get(cpu));
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"memory\">");
-		st.append(magentoAttributesReversed.get(ram));
+		st.append(magentoAttributes.get(ram));
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"hdd\">");
 		st.append(hdd);
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"battery\">");
@@ -114,6 +112,9 @@ public class FieldManipulationHelper {
 	
 	public String trimName(String name, int spaces) {
 		StringBuilder st = new StringBuilder();
+		name = name.replace("WEEKLY", "");
+		name = name.replace("PROMO BUNDLE", "");
+		name = name.replace("NEW!", "");
 		name = name.replace("NB", "");
 		name = name.replace("Преносим компютър", "");
 		name = name.replace("Tablet","");

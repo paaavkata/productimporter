@@ -48,6 +48,19 @@ public class SolytronToMagentoMapper {
 		List<Attribute> customAttributes = magentoProduct.getCustomAttributes();
 		
 		magentoProduct.setName(helper.trimName(solytronProduct.getName(), 4));
+
+		if(!magentoProduct.getName().toLowerCase().contains(solytronProduct.getVendor())){
+			magentoProduct.setName(solytronProduct.getVendor() + " " + magentoProduct.getName());
+		}
+		
+		String modelNumber = propertiesMap.get(3);
+		
+		if(modelNumber != null) {
+			if(!magentoProduct.getName().toLowerCase().contains(modelNumber.toLowerCase())){
+				magentoProduct.setName(magentoProduct.getName() + " " + modelNumber);
+			}
+		}
+		
 		magentoProduct.setWeight(Double.valueOf(properties.get(48) != null ? properties.get(48).getValue().get(0).getText() : "1"));
 		
 		for(Property property : properties.values()){
@@ -60,7 +73,13 @@ public class SolytronToMagentoMapper {
 		String battery = propertiesMap.get(43) != null ? propertiesMap.remove(43) : "" + propertiesMap.get(44) != null ? " " + propertiesMap.remove(44) : "";
 		String ram = helper.generateRamFilter(propertiesMap.remove(5));
 		String laptopDisplayInfo = propertiesMap.get(9) != null ? propertiesMap.remove(9).trim() : "";
-
+		
+		customAttributes.add(helper.newKeyValueAttribute("url_key", helper.generateUrl(magentoProduct.getName(), true)));
+		
+		customAttributes.add(helper.newKeyValueAttribute("meta_description", helper.generateMetaDescription(magentoProduct.getName(), true)));
+		
+		customAttributes.add(helper.newKeyValueAttribute("meta_title", helper.generateMetaTitle(magentoProduct.getName(), true)));
+		
 		customAttributes.add(helper.newKeyListAttribute("hdd_razmer_filt_r_laptop", helper.generateHddFilter(hdd)));
 		
 		customAttributes.add(helper.newKeyValueAttribute("laptop_battery", battery));
@@ -187,8 +206,20 @@ public class SolytronToMagentoMapper {
 		HashMap<Integer, Property> properties = generatePropertiesMap(solytronProduct);
 		HashMap<Integer, String> propertiesMap = new HashMap<Integer, String>();
 		List<Attribute> customAttributes = new ArrayList<>();
-
+		
 		magentoProduct.setName(helper.trimName(solytronProduct.getName(), 4));
+
+		if(!magentoProduct.getName().toLowerCase().contains(solytronProduct.getVendor())){
+			magentoProduct.setName(solytronProduct.getVendor() + " " + magentoProduct.getName());
+		}
+		
+		String modelNumber = propertiesMap.get(3);
+		if(modelNumber != null) {
+			if(!magentoProduct.getName().toLowerCase().contains(modelNumber.toLowerCase())){
+				magentoProduct.setName(magentoProduct.getName() + " " + modelNumber);
+			}
+		}
+		
 		magentoProduct.setWeight(Double.valueOf(properties.get(48) != null ? properties.get(48).getValue().get(0).getText() : "1"));
 		
 		for(Property property : properties.values()){
@@ -368,13 +399,6 @@ public class SolytronToMagentoMapper {
 		magentoProduct.setTypeId("simple");
 		magentoProduct.setName(product.getName());
 		
-		if(!magentoProduct.getName().toLowerCase().contains(product.getVendor().toLowerCase())){
-			magentoProduct.setName(product.getVendor() + " " + magentoProduct.getName());
-		}
-		
-		magentoProduct.setExtensionAttributes(new ExtensionAttributeRequest());
-		magentoProduct.getExtensionAttributes().setItem(generateStockInfo(product.getStockInfoValue()));
-		
 		String brand;
 		if(product.getVendor() == null){
 			brand = helper.generateBrand(magentoProduct.getName());
@@ -382,16 +406,20 @@ public class SolytronToMagentoMapper {
 		else{
 			brand = helper.generateBrand(product.getVendor());
 		}
+
+		magentoProduct.setExtensionAttributes(new ExtensionAttributeRequest());
+		magentoProduct.getExtensionAttributes().setItem(generateStockInfo(product.getStockInfoValue()));
+		
 		customAttributes.add(helper.newKeyValueAttribute("manufacturer", brand));
 		
 		customAttributes.add(helper.newKeyValueAttribute("ean", product.getEan()));
-		
+
 		List<String> stringCategories = new ArrayList<>();
 		for(Integer cat : categories){
 			stringCategories.add(String.valueOf(cat));
 		}
 		
-		customAttributes.add(helper.newKeyListAttribute("categories", stringCategories));
+		customAttributes.add(helper.newKeyListAttribute("category_ids", stringCategories));
 		
 		magentoProduct.setCustomAttributes(customAttributes);
 		

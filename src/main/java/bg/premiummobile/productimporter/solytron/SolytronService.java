@@ -67,6 +67,9 @@ public class SolytronService {
 		int counter = 1;
 		
 		for(SolytronProduct solytronProduct : solytronProducts){
+			if(counter++ < 2){
+				continue;
+			}
 			String sku = solytronProduct.getCodeId();
 			sku = sku.replaceAll("/", "");
 			sku = sku.replace((char) 92, (char) 0);
@@ -83,7 +86,7 @@ public class SolytronService {
 				MagentoProductRequest magentoProduct = mapper.mapSolytronProduct(solytronProduct, category, magentoCategoriesInner);
 				magentoProduct.setAttributeSetId(attributeSetId);
 				result.setId(magentoProduct.getSku());
-				result.setSequenceNumber(counter++);
+				result.setSequenceNumber(counter);
 				result.setName(magentoProduct.getName());
 				if(solytronProduct.getImages() != null){
 					result.setPhotos(solytronProduct.getImages().size());
@@ -113,6 +116,9 @@ public class SolytronService {
 			}
 			System.out.println();
 			System.out.println("==================================================================");
+			if(counter >= 10){
+				break;
+			}
 		}
 		magentoService.saveStockInfo();
 		return results;
@@ -156,11 +162,6 @@ public class SolytronService {
 		int productCounter = 0;
 		
 		for(SolytronProduct productSimple : solytronProducts){
-			productCounter++;
-			if(productCounter < 2){
-				continue;
-			}
-			
 			System.out.println(productCounter);
 			SolytronProduct fullProduct = getFullProduct(productSimple);
 			productsNew.add(fullProduct);			
@@ -177,9 +178,6 @@ public class SolytronService {
 //					}
 //				}
 //			}
-			if(productCounter >= 10){
-				break;
-			}
 		}
 		return productsNew;
 	}
