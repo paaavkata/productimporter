@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import bg.premiummobile.productimporter.configuration.ConfigurationReader;
-import bg.premiummobile.productimporter.magento.domain.Attribute;
-import bg.premiummobile.productimporter.magento.domain.KeyListAttribute;
-import bg.premiummobile.productimporter.magento.domain.KeyValueAttribute;
-import bg.premiummobile.productimporter.magento.domain.MagentoProductRequest;
+import bg.premiummobile.productimporter.magento.model.Attribute;
+import bg.premiummobile.productimporter.magento.model.KeyListAttribute;
+import bg.premiummobile.productimporter.magento.model.KeyValueAttribute;
+import bg.premiummobile.productimporter.magento.model.MagentoProductRequest;
 import bg.premiummobile.productimporter.solytron.model.Property;
 
 
@@ -99,11 +99,11 @@ public class FieldManipulationHelper {
 	public String generateShortDescription(String displaySize, String cpu, String ram, String hdd, String battery) {
 		StringBuilder st = new StringBuilder();
 		st.append("<ul class=\"short-description-list smartphone\"><div class=\"row\"><div class=\"col-md-2 col-md-offset-1\"><li class=\"display-size\">");
-		st.append(displaySize);
+		st.append(magentoAttributesReversed.get(displaySize));
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"processor\">");
-		st.append(cpu);
+		st.append(magentoAttributesReversed.get(cpu));
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"memory\">");
-		st.append(ram);
+		st.append(magentoAttributesReversed.get(ram));
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"hdd\">");
 		st.append(hdd);
 		st.append("</li></div><div class=\"col-md-2\"><li class=\"battery\">");

@@ -7,12 +7,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import bg.premiummobile.productimporter.magento.domain.Attribute;
-import bg.premiummobile.productimporter.magento.domain.ExtensionAttributeRequest;
-import bg.premiummobile.productimporter.magento.domain.KeyListAttribute;
-import bg.premiummobile.productimporter.magento.domain.KeyValueAttribute;
-import bg.premiummobile.productimporter.magento.domain.MagentoProductRequest;
-import bg.premiummobile.productimporter.magento.domain.MagentoStockItemRequest;
+import bg.premiummobile.productimporter.magento.model.Attribute;
+import bg.premiummobile.productimporter.magento.model.ExtensionAttributeRequest;
+import bg.premiummobile.productimporter.magento.model.KeyValueAttribute;
+import bg.premiummobile.productimporter.magento.model.MagentoProductRequest;
+import bg.premiummobile.productimporter.magento.model.MagentoStockItemRequest;
 import bg.premiummobile.productimporter.solytron.model.Property;
 import bg.premiummobile.productimporter.solytron.model.PropertyGroup;
 import bg.premiummobile.productimporter.solytron.model.SolytronProduct;
@@ -24,7 +23,7 @@ public class SolytronToMagentoMapper {
 	@Autowired
 	private FieldManipulationHelper helper;
 	
-	public static final boolean TAX_INCLUDED = false;
+	public static final boolean TAX_INCLUDED = true;
 	
 	public MagentoProductRequest mapSolytronProduct(SolytronProduct solytronProduct, String type, List<Integer> categories){
 		MagentoProductRequest magentoProduct;
@@ -55,13 +54,14 @@ public class SolytronToMagentoMapper {
 			propertiesMap.put(property.getPropertyId(), property.getValue().get(0).getText());
 		}
 		
-		String displaySize = helper.generateDisplaySize(propertiesMap.remove(1));
+		String displaySize = helper.generateDisplaySize(propertiesMap.get(1));
 		String hdd = helper.generateHddSize(propertiesMap.get(11));
 		String cpu = helper.generateCpuFilter(propertiesMap.remove(55), propertiesMap.get(2));
 		String battery = propertiesMap.get(43) != null ? propertiesMap.remove(43) : "" + propertiesMap.get(44) != null ? " " + propertiesMap.remove(44) : "";
 		String ram = helper.generateRamFilter(propertiesMap.remove(5));
-		
-		customAttributes.add(helper.newKeyListAttribute("hdd_razmer_filt_r_laptop", helper.generateHddFilter(propertiesMap.get(11))));
+		String laptopDisplayInfo = propertiesMap.get(9) != null ? propertiesMap.remove(9).trim() : "";
+
+		customAttributes.add(helper.newKeyListAttribute("hdd_razmer_filt_r_laptop", helper.generateHddFilter(hdd)));
 		
 		customAttributes.add(helper.newKeyValueAttribute("laptop_battery", battery));
 		
@@ -71,9 +71,9 @@ public class SolytronToMagentoMapper {
 		
 		customAttributes.add(helper.newKeyValueAttribute("laptop_dimensions", propertiesMap.remove(47)));
 
-		customAttributes.add(helper.newKeyValueAttribute("laptop_display_info", propertiesMap.get(1) + " " + propertiesMap.get(9).trim()));
+		customAttributes.add(helper.newKeyValueAttribute("laptop_display_info", propertiesMap.get(1) + " " + laptopDisplayInfo));
 		
-		customAttributes.add(helper.newKeyListAttribute("laptop_display_resolution", helper.generateDisplayResolution(propertiesMap.get(1), propertiesMap.remove(70)).trim()));
+		customAttributes.add(helper.newKeyListAttribute("laptop_display_resolution", helper.generateDisplayResolution(propertiesMap.remove(1), propertiesMap.remove(70)).trim()));
 		
 		customAttributes.add(helper.newKeyListAttribute("laptop_display_size", displaySize));
 		
@@ -100,7 +100,7 @@ public class SolytronToMagentoMapper {
 		customAttributes.add(helper.newKeyValueAttribute("laptop_warranty", propertiesMap.remove(49)));
 		
 		customAttributes.add(helper.newKeyListAttribute("laptop_yes_no", helper.generateLaptopYesNo(propertiesMap.remove(17),propertiesMap.remove(51),propertiesMap.remove(11), propertiesMap.remove(74), propertiesMap.remove(38),propertiesMap.remove(40),
-				propertiesMap.remove(59),propertiesMap.remove(28),propertiesMap.remove(62),propertiesMap.remove(52),propertiesMap.remove(22),propertiesMap.remove(9), propertiesMap.remove(69))));
+				propertiesMap.remove(59),propertiesMap.remove(28),propertiesMap.remove(62),propertiesMap.remove(52),propertiesMap.remove(22), laptopDisplayInfo, propertiesMap.remove(69))));
 		
 		StringBuilder portsString = new StringBuilder();
 		List<Property> productProperties2 = new ArrayList<Property>(properties.values());
@@ -154,12 +154,6 @@ public class SolytronToMagentoMapper {
 				continue;
 			}
 			if(property.getPropertyId() == 28){
-				propertiesMap.remove(28);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 29){
 				propertiesMap.remove(28);
 				portsString.append(property.getName() + ", ");
 				productProperties2.remove(property);
@@ -430,6 +424,7 @@ public class SolytronToMagentoMapper {
 		
 		return magentoStockItem;
 	}
+	
 	public double generatePrice(SolytronProduct product){
 		Double price;
 		if(product.getPriceEndUser() != null){

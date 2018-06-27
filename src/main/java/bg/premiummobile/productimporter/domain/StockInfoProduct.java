@@ -3,14 +3,14 @@ package bg.premiummobile.productimporter.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import bg.premiummobile.productimporter.magento.domain.MagentoProduct;
+import bg.premiummobile.productimporter.magento.model.MagentoProduct;
 
 public class StockInfoProduct implements MagentoProduct {
 	
 	@JsonProperty("sku")
 	private String sku;
 	@JsonProperty("price")
-	private double price;
+	private Double price;
 	@JsonProperty("status")
 	private int status;
 	@JsonProperty("visibility")
@@ -26,7 +26,7 @@ public class StockInfoProduct implements MagentoProduct {
 	//2 - Only catalog
 	//3 - Only searchable
 	//4 - Both 2 & 3
-	public StockInfoProduct(String sku, double price, int status, int visibility, int qty, boolean inStock){
+	public StockInfoProduct(String sku, Double price, int status, int visibility, int qty, boolean inStock){
 		
 		this.attribute = new ExtensionAttribute(qty, inStock);
 		this.sku = sku;
@@ -73,10 +73,10 @@ public class StockInfoProduct implements MagentoProduct {
 	public void setSku(String sku) {
 		this.sku = sku;
 	}
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	public int getStatus() {

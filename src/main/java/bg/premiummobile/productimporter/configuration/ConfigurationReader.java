@@ -41,6 +41,7 @@ public class ConfigurationReader {
 	private final String filePath = "StockInfo.json";
 	private final String brands = "brands.properties";
 	private final String colors = "colors.properties";
+	private final String replaceTech = "replacetech.properties";
 	
 	private final HashMap<String, String> solytronMap;
 	private final HashMap<String, String> solytronLaptopMap;
@@ -52,6 +53,7 @@ public class ConfigurationReader {
 	private final HashMap<String, String> magentoColorsMap;
 	private final HashMap<String, String> magentoAttributesMap;
 	private final HashMap<String, String> magentoCategoriesMap;
+	private final HashMap<String, String> replaceTechMap;
 	
 	@Autowired
 	public ConfigurationReader(ObjectMapper om){
@@ -66,9 +68,14 @@ public class ConfigurationReader {
 		this.solytronTabletMap = load(solytronTablet);
 		this.solytronCategoriesMap = load(solytronCategories);
 		this.magentoCategoriesMap = load(magentoCategories);
+		this.replaceTechMap = load(replaceTech);
 	}
 	
 
+	public HashMap<String, String> getReplaceTech(){
+		return replaceTechMap;
+	}
+	
 	public HashMap<String, String> getSolytronLaptop(){
 		return solytronLaptopMap;
 	}

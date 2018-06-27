@@ -1,4 +1,4 @@
-package bg.premiummobile.productimporter.solytron.model;
+package bg.premiummobile.productimporter.magento.model;
 
 import java.util.List;
 

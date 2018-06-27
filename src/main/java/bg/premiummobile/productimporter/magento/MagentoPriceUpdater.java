@@ -10,13 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import bg.premiummobile.productimporter.magento.domain.Attribute;
-import bg.premiummobile.productimporter.magento.domain.ConfigurableProductOption;
-import bg.premiummobile.productimporter.magento.domain.MagentoAttribute;
-import bg.premiummobile.productimporter.magento.domain.MagentoProductResponse;
-import bg.premiummobile.productimporter.magento.domain.Option;
-import bg.premiummobile.productimporter.magento.domain.Value;
+import bg.premiummobile.productimporter.magento.model.Attribute;
+import bg.premiummobile.productimporter.magento.model.ConfigurableProductOption;
+import bg.premiummobile.productimporter.magento.model.MagentoAttribute;
+import bg.premiummobile.productimporter.magento.model.MagentoProductResponse;
+import bg.premiummobile.productimporter.magento.model.Option;
+import bg.premiummobile.productimporter.magento.model.Value;
 
 @Component
 public class MagentoPriceUpdater {

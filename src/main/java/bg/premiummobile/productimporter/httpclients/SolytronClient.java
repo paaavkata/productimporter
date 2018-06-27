@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import bg.premiummobile.productimporter.configuration.ConfigurationReader;
 import bg.premiummobile.productimporter.configuration.HttpClient;
+import bg.premiummobile.productimporter.solytron.model.ProductCatalog;
 import bg.premiummobile.productimporter.solytron.model.ProductSet;
 import bg.premiummobile.productimporter.solytron.model.SolytronProduct;
 
@@ -34,22 +35,31 @@ public class SolytronClient {
 		this.solytronProperties = reader.getSolytron();
 		this.serializer = new Persister();
 	}
-	public SolytronProduct downloadProduct(SolytronProduct product) throws Exception{
-		CloseableHttpResponse response = client.getClient().execute(generateGetRequest(product.getProductId(), "product"));
-		SolytronProduct productNew = serializer.read(SolytronProduct.class, response.getEntity().getContent());
-		response.close();
-		return productNew;
+	public SolytronProduct downloadProduct(String id) throws Exception{
+		try(CloseableHttpResponse response = client.getClient().execute(generateGetRequest(id, "product"))){
+			SolytronProduct productNew = serializer.read(SolytronProduct.class, response.getEntity().getContent());
+			return productNew;
+		}
 	}
 	
 	public List<SolytronProduct> downloadCategory(String code) throws Exception{
-		CloseableHttpResponse response = client.getClient().execute(generateGetRequest(code, "category"));
-		ProductSet productSet = serializer.read(ProductSet.class, response.getEntity().getContent());
-		return productSet.getProducts();
+		ProductSet productSet = null;
+		try(CloseableHttpResponse response = client.getClient().execute(generateGetRequest(code, "category"))){
+			productSet = serializer.read(ProductSet.class, response.getEntity().getContent());
+		}
+		if(productSet != null){
+			return productSet.getProducts();
+		}
+		else{
+			return null;
+		}
 	}
 	
-	public void downloadCategoriesList() throws Exception{
-		CloseableHttpResponse response = client.getClient().execute(generateGetRequest(null, "categoryList"));
-		ProductSet productSet = serializer.read(ProductSet.class, response.getEntity().getContent());
+	public ProductCatalog downloadCategoriesList() throws Exception{
+		try(CloseableHttpResponse response = client.getClient().execute(generateGetRequest(null, "categoryList"))){
+			ProductCatalog productSet = serializer.read(ProductCatalog.class, response.getEntity().getContent());
+			return productSet;
+		}
 	}
 	
 	private HttpGet generateGetRequest(String code, String type) throws Exception{

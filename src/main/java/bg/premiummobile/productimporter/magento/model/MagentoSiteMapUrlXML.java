@@ -1,4 +1,4 @@
-package bg.premiummobile.productimporter.magento.domain;
+package bg.premiummobile.productimporter.magento.model;
 
 
 import org.simpleframework.xml.Element;

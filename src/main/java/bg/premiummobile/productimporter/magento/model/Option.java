@@ -1,4 +1,4 @@
-package bg.premiummobile.productimporter.magento.domain;
+package bg.premiummobile.productimporter.magento.model;
 
 public class Option {
 

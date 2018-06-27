@@ -1,8 +1,10 @@
 package bg.premiummobile.productimporter.solytron.model;
 
 import org.simpleframework.xml.Attribute;
+import org.simpleframework.xml.Root;
 import org.simpleframework.xml.Text;
 
+@Root(name="image")
 public class Image {
 	
 	@Attribute

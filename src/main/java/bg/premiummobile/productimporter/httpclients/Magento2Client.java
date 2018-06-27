@@ -35,27 +35,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import bg.premiummobile.productimporter.configuration.ConfigurationReader;
 import bg.premiummobile.productimporter.configuration.HttpClient;
 import bg.premiummobile.productimporter.domain.StockInfoProduct;
-import bg.premiummobile.productimporter.magento.domain.Attribute;
-import bg.premiummobile.productimporter.magento.domain.ExtensionAttributeRequest;
-import bg.premiummobile.productimporter.magento.domain.ItemResponse;
-import bg.premiummobile.productimporter.magento.domain.MagentoAttribute;
-import bg.premiummobile.productimporter.magento.domain.MagentoPostProduct;
-import bg.premiummobile.productimporter.magento.domain.MagentoProduct;
-import bg.premiummobile.productimporter.magento.domain.MagentoProductRequest;
-import bg.premiummobile.productimporter.magento.domain.MagentoProductResponse;
-import bg.premiummobile.productimporter.magento.domain.MagentoSiteMapXML;
-import bg.premiummobile.productimporter.magento.domain.MediaGalleryContent;
-import bg.premiummobile.productimporter.magento.domain.MediaGalleryEntry;
-import bg.premiummobile.productimporter.magento.domain.MediaGalleryEntryWrapper;
-import bg.premiummobile.productimporter.magento.domain.Option;
-import bg.premiummobile.productimporter.magento.domain.ProductLink;
-import bg.premiummobile.productimporter.magento.domain.TierPrice;
-import bg.premiummobile.productimporter.solytron.model.Category;
+import bg.premiummobile.productimporter.magento.model.Attribute;
+import bg.premiummobile.productimporter.magento.model.Category;
+import bg.premiummobile.productimporter.magento.model.ExtensionAttributeRequest;
+import bg.premiummobile.productimporter.magento.model.ItemResponse;
+import bg.premiummobile.productimporter.magento.model.MagentoAttribute;
+import bg.premiummobile.productimporter.magento.model.MagentoPostProduct;
+import bg.premiummobile.productimporter.magento.model.MagentoProduct;
+import bg.premiummobile.productimporter.magento.model.MagentoProductRequest;
+import bg.premiummobile.productimporter.magento.model.MagentoProductResponse;
+import bg.premiummobile.productimporter.magento.model.MagentoSiteMapXML;
+import bg.premiummobile.productimporter.magento.model.MediaGalleryContent;
+import bg.premiummobile.productimporter.magento.model.MediaGalleryEntry;
+import bg.premiummobile.productimporter.magento.model.MediaGalleryEntryWrapper;
+import bg.premiummobile.productimporter.magento.model.Option;
+import bg.premiummobile.productimporter.magento.model.ProductLink;
+import bg.premiummobile.productimporter.magento.model.TierPrice;
 
 @Component
 public class Magento2Client {
 
-	@Autowired
 	private HttpClient client;
 	
 	private ConfigurationReader reader;
@@ -156,7 +155,7 @@ public class Magento2Client {
 		MagentoPostProduct postProduct = new MagentoPostProduct();
 		postProduct.setMagentoProduct(product);
 		StringEntity params = new StringEntity(om.writeValueAsString(postProduct), "UTF-8");
-		System.out.println("Product Json: ");
+		System.out.println("Request product JSON: ");
 		System.out.println(om.writeValueAsString(postProduct));
 //		System.out.println("Product: " + product.getName() + " " + product.getSku());
 		HttpPost httpPost = new HttpPost(this.urlBuilder(magentoProperties.get("product")));
@@ -164,8 +163,9 @@ public class Magento2Client {
 		httpPost.addHeader("Content-Type", "application/json");
 		httpPost.setEntity(params);
 		CloseableHttpResponse response = client.getClient().execute(httpPost);
-		System.out.println("Product response: " + EntityUtils.toString(response.getEntity(), "UTF-8"));
-		System.err.println("Product status: " + response.getStatusLine().getStatusCode());
+		if(response.getStatusLine().getStatusCode() != 200){
+			System.err.println("Product status: " + response.getStatusLine().getStatusCode());
+		}
 		response.close();
 		return response.getStatusLine();
 	}
@@ -315,7 +315,11 @@ public class Magento2Client {
 		MediaGalleryEntry entry = new MediaGalleryEntry();
         entry.setMediaType("image");
         entry.setDisabled(false);
-        entry.setLabel(product.getName() + " на топ цена и на изплащане от Примиъм Мобайл ЕООД");
+        if(product.getPrice() > 150){
+        	entry.setLabel(product.getName() + " на топ цена и на изплащане от Примиъм Мобайл ЕООД");
+        } else {
+        	entry.setLabel(product.getName() + " на топ цена от Примиъм Мобайл ЕООД");
+        }
         entry.setPosition(counter);
         entry.setFileName(provider + "/" + imageName);
 
@@ -353,11 +357,12 @@ public class Magento2Client {
 		
 		CloseableHttpResponse response = client.getClient().execute(httpPost);
 		
-		System.out.println("---->Image Upload Status: " + response.getStatusLine().getStatusCode());
+		StatusLine statusLine = response.getStatusLine();
+		System.out.println("---->Image Upload Status: " + statusLine.getStatusCode());
 		
 		baos.close();
 		response.close();
 		
-		return response.getStatusLine();
+		return statusLine;
 	}
 }

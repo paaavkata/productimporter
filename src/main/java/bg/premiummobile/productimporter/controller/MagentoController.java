@@ -11,14 +11,18 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import bg.premiummobile.productimporter.configuration.HttpClient;
 import bg.premiummobile.productimporter.httpclients.Magento2Client;
-import bg.premiummobile.productimporter.magento.domain.MagentoAttribute;
-import bg.premiummobile.productimporter.magento.domain.MagentoSiteMapUrlXML;
-import bg.premiummobile.productimporter.magento.domain.MagentoSiteMapXML;
+import bg.premiummobile.productimporter.magento.MagentoService;
+import bg.premiummobile.productimporter.magento.model.MagentoAttribute;
+import bg.premiummobile.productimporter.magento.model.MagentoSiteMapUrlXML;
+import bg.premiummobile.productimporter.magento.model.MagentoSiteMapXML;
 
 @Controller
 @RequestMapping("/magento")
@@ -29,6 +33,9 @@ public class MagentoController {
 	
 	@Autowired
 	private Magento2Client magentoClient;
+	
+	@Autowired
+	private MagentoService service;
 	
 	@Autowired
 	private HttpClient client;
@@ -102,5 +109,11 @@ public class MagentoController {
 		List<String> response = magentoClient.downloadMagentoCategories();
 		
 		return response;
+	}
+	
+	@PostMapping("/magentoprices")
+	@ResponseBody
+	public List<String> uploadPrices(@RequestParam("file") MultipartFile file) throws Exception{
+		return service.mapFile(file);
 	}
 }
