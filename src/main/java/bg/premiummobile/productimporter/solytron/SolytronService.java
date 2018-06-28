@@ -67,9 +67,9 @@ public class SolytronService {
 		int counter = 1;
 		
 		for(SolytronProduct solytronProduct : solytronProducts){
-			if(counter++ < 2){
-				continue;
-			}
+//			if(counter++ < 2){
+//				continue;
+//			}
 			String sku = solytronProduct.getCodeId();
 			sku = sku.replaceAll("/", "");
 			sku = sku.replace((char) 92, (char) 0);
@@ -114,13 +114,14 @@ public class SolytronService {
 				result.setTotalTime(System.currentTimeMillis() - startTime);
 				results.add(result);
 			}
+			magentoService.saveStockInfo();
 			System.out.println();
 			System.out.println("==================================================================");
-			if(counter >= 10){
-				break;
-			}
+//			if(counter >= 10){
+//				break;
+//			}
 		}
-		magentoService.saveStockInfo();
+		
 		return results;
 	}
 	

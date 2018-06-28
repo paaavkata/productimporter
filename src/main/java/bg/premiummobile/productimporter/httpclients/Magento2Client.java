@@ -45,6 +45,7 @@ import bg.premiummobile.productimporter.magento.model.MagentoProduct;
 import bg.premiummobile.productimporter.magento.model.MagentoProductRequest;
 import bg.premiummobile.productimporter.magento.model.MagentoProductResponse;
 import bg.premiummobile.productimporter.magento.model.MagentoSiteMapXML;
+import bg.premiummobile.productimporter.magento.model.MagentoStockItemRequest;
 import bg.premiummobile.productimporter.magento.model.MediaGalleryContent;
 import bg.premiummobile.productimporter.magento.model.MediaGalleryEntry;
 import bg.premiummobile.productimporter.magento.model.MediaGalleryEntryWrapper;
@@ -181,6 +182,10 @@ public class Magento2Client {
 		initial.setOptions(new ArrayList<Option>());
 		initial.setTypeId("simple");
 		initial.setExtensionAttributes(new ExtensionAttributeRequest());
+		MagentoStockItemRequest stockItemRequest = new MagentoStockItemRequest();
+		stockItemRequest.setQty(0);
+		stockItemRequest.setStock(false);
+		initial.getExtensionAttributes().setItem(stockItemRequest);
 		initial.setProductLinks(new ArrayList<ProductLink>());
 //		initial.setMediaGalleryEntries(new ArrayList<MediaGalleryEntry>());
 		initial.setTierPrices(new ArrayList<TierPrice>());

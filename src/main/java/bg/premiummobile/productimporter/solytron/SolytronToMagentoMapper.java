@@ -1,8 +1,10 @@
 package bg.premiummobile.productimporter.solytron;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,28 +46,29 @@ public class SolytronToMagentoMapper {
 	private MagentoProductRequest generateLaptop(SolytronProduct solytronProduct, List<Integer> categories){
 		MagentoProductRequest magentoProduct = generateSkeleton(solytronProduct, categories);
 		HashMap<Integer, Property> properties = generatePropertiesMap(solytronProduct);
-		HashMap<Integer, String> propertiesMap = new HashMap<Integer, String>();
+		HashMap<Integer, String> propertiesMap = new HashMap<>();
 		List<Attribute> customAttributes = magentoProduct.getCustomAttributes();
+		
+		for(Entry<Integer, Property> entry : properties.entrySet()){
+			propertiesMap.put(entry.getKey(), entry.getValue().getValue().get(0).getText());
+		}
 		
 		magentoProduct.setName(helper.trimName(solytronProduct.getName(), 4));
 
-		if(!magentoProduct.getName().toLowerCase().contains(solytronProduct.getVendor())){
+		if(!magentoProduct.getName().toLowerCase().contains(solytronProduct.getVendor().toLowerCase())){
 			magentoProduct.setName(solytronProduct.getVendor() + " " + magentoProduct.getName());
 		}
 		
-		String modelNumber = propertiesMap.get(3);
+		String modelNumber = propertiesMap.remove(103);
+		propertiesMap.remove(102);
 		
-		if(modelNumber != null) {
+		if(modelNumber != null && !modelNumber.contains("+")) {
 			if(!magentoProduct.getName().toLowerCase().contains(modelNumber.toLowerCase())){
 				magentoProduct.setName(magentoProduct.getName() + " " + modelNumber);
 			}
 		}
 		
 		magentoProduct.setWeight(Double.valueOf(properties.get(48) != null ? properties.get(48).getValue().get(0).getText() : "1"));
-		
-		for(Property property : properties.values()){
-			propertiesMap.put(property.getPropertyId(), property.getValue().get(0).getText());
-		}
 		
 		String displaySize = helper.generateDisplaySize(propertiesMap.get(1));
 		String hdd = helper.generateHddSize(propertiesMap.get(11));
@@ -122,74 +125,21 @@ public class SolytronToMagentoMapper {
 				propertiesMap.remove(59),propertiesMap.remove(28),propertiesMap.remove(62),propertiesMap.remove(52),propertiesMap.remove(22), laptopDisplayInfo, propertiesMap.remove(69))));
 		
 		StringBuilder portsString = new StringBuilder();
-		List<Property> productProperties2 = new ArrayList<Property>(properties.values());
-		for(Property property : properties.values()){
-			if(property.getPropertyId() == 18){
-				propertiesMap.remove(18);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 29){
-				propertiesMap.remove(29);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 41){
-				propertiesMap.remove(41);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 42){
-				propertiesMap.remove(42);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 53){
-				propertiesMap.remove(53);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 61){
-				propertiesMap.remove(61);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 62){
-				propertiesMap.remove(62);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 24){
-				propertiesMap.remove(24);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
-			}
-			if(property.getPropertyId() == 28){
-				propertiesMap.remove(28);
-				portsString.append(property.getName() + ", ");
-				productProperties2.remove(property);
-				continue;
+		
+		List<Integer> portPropertyIds = Arrays.asList(18,24,28,29,41,42,53,61,62);
+		
+		for(Integer i : portPropertyIds){
+			if(properties.containsKey(i)){
+				portsString.append(properties.get(i).getName() + ", ");
+				propertiesMap.remove(i);
 			}
 		}
 		
 		customAttributes.add(helper.newKeyValueAttribute("laptop_ports", portsString.toString()));
 		
 		StringBuilder otherInfoString = new StringBuilder();
-		for(Property property : productProperties2){
-			if(properties.containsKey(property.getPropertyId())){
-				otherInfoString.append(property.getName() + ": " + property.getValue().get(0).getText());
-				if(properties.size() != 1){
-					otherInfoString.append("; ");
-				}
-			}
+		for(Entry<Integer, String> entry : propertiesMap.entrySet()){
+			otherInfoString.append(properties.get(entry.getKey()).getName() + ": " + properties.get(entry.getKey()).getValue().get(0).getText() + ", ");
 		}
 		
 		customAttributes.add(helper.newKeyValueAttribute("laptop_other_info", otherInfoString.toString()));
@@ -369,17 +319,26 @@ public class SolytronToMagentoMapper {
 	}
 	
 	private HashMap<Integer, Property> generatePropertiesMap(SolytronProduct product){
+		
 		HashMap<Integer, Property> properties = new HashMap<Integer, Property>();
-		KeyValueAttribute productGroup = new KeyValueAttribute();
-		productGroup.setAttributeCode("product_group");
+		
 		if(product.getProperties().size() > 0){
 			for(PropertyGroup g : product.getProperties()){
-				productGroup.setValue(g.getProductGroupName() != null ? g.getProductGroupName() : "");
-				if(g.getList() != null){
-					for(Property property : g.getList()){
-						properties.put(property.getPropertyId(), property);
+				if("Product : Common".equals(g.getProductGroupName())){
+					if(g.getList() != null){
+						for(Property property : g.getList()){
+							properties.put(100 + property.getPropertyId(), property);
+						}
 					}
 				}
+				else{
+					if(g.getList() != null){
+						for(Property property : g.getList()){
+							properties.put(property.getPropertyId(), property);
+						}
+					}
+				}
+				
 			}
 		}
 		return properties;
