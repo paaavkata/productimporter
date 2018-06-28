@@ -45,7 +45,7 @@ public class SolytronService {
 		this.solytronCategories = reader.getSolytronCategories();
 	}
 	
-	public List<Result> downloadAndImportCategory(String category){
+	public List<Result> downloadAndImportCategory(String category) throws Exception{
 		List<Result> results = new ArrayList<>();
 		List<SolytronProduct> solytronProducts = getCategoryStockProducts(solytronCategories.get(category));
 		List<Integer> magentoCategoriesInner = new ArrayList<>();
@@ -65,9 +65,11 @@ public class SolytronService {
 		}
 		
 		int counter = 1;
-		
+		System.out.println("Total product size: " + solytronProducts.size());
 		for(SolytronProduct solytronProduct : solytronProducts){
-//			if(counter++ < 2){
+			counter++;
+			System.out.println(counter);
+//			if(counter < 2){
 //				continue;
 //			}
 			String sku = solytronProduct.getCodeId();
@@ -152,6 +154,7 @@ public class SolytronService {
 		fullProduct.setStockInfoValue(stockInfo.getStockInfoValue());
 		return fullProduct;
 	}
+	
 	public List<SolytronProduct> getCategoryFullProducts(String category){
 		List<SolytronProduct> solytronProducts = getCategoryStockProducts(category);
 		System.out.println(solytronProducts.size());

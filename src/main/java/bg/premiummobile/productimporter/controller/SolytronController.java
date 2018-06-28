@@ -17,7 +17,7 @@ public class SolytronController {
 	
 	@GetMapping("/importCategoryToMagento/{categoryName}/")
 	@ResponseBody
-	public List<Result> downloadAndImportCategory(@PathVariable("categoryName") String category){
+	public List<Result> downloadAndImportCategory(@PathVariable("categoryName") String category) throws Exception{
 		List<Result> results = solytronService.downloadAndImportCategory(category);
 		return results;
 	}

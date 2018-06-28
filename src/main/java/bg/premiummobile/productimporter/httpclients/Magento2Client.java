@@ -64,6 +64,10 @@ public class Magento2Client {
 	
 	private String magentoToken;
 	
+	private static final long TOKEN_LIFETIME_MINS = 25;
+	
+	private long tokenLastUsed;
+	
 	private Serializer serializer;
 	
 	private HashMap<String, String> magentoProperties;
@@ -94,24 +98,23 @@ public class Magento2Client {
 			}
 			else{
 				System.out.println(this.magentoToken + " <======== MAGENTO TOKEN");
-				Timer timer = new Timer();
-				timer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						magentoToken = null;
-					}
-				}, 4 * 60 * 60 * 1000);
 			}
         }
+		response.close();
 	}
 	
 	private String magentoToken() throws Exception{
 		if(this.magentoToken != null){
+			if(tokenLastUsed + 1000 * 60 * TOKEN_LIFETIME_MINS < System.currentTimeMillis()) {
+				magentoAuthenticate();
+			}
+			tokenLastUsed = System.currentTimeMillis();
 			return this.magentoToken;
 		}
 		else{
 			magentoAuthenticate();
 			if(this.magentoToken != null){
+				tokenLastUsed = System.currentTimeMillis();
 				return this.magentoToken;
 			}
 			else{
@@ -142,13 +145,14 @@ public class Magento2Client {
 		StatusLine statusLine;
 		if(response.getStatusLine().getStatusCode() == 200){
 			statusLine = updateMagentoProduct(product);
+			response.close();
 			return statusLine;
 		}
 		else{
 			System.out.println(om.writeValueAsString(postProduct));
-			System.out.println("Product upload error: " + EntityUtils.toString(response.getEntity(), "UTF-8"));
+		    System.out.println("Product upload error: " + EntityUtils.toString(response.getEntity(), "UTF-8"));
+		    response.close();
 		}
-		response.close();
 		return response.getStatusLine();
 	}
 	
@@ -202,7 +206,7 @@ public class Magento2Client {
 		if (response.getEntity() != null) {
 			category = om.readValue(EntityUtils.toString(response.getEntity()), Category.class);
         }
-		
+		response.close();
 		return walkCategories(category);
 	}
 	
@@ -248,6 +252,7 @@ public class Magento2Client {
 		MagentoProductResponse product;
 		if(response.getStatusLine().getStatusCode() == 200){
 			product = om.readValue(EntityUtils.toString(response.getEntity(), "UTF-8"), MagentoProductResponse.class);
+			response.close();
 			return product;
 		}
 		response.close();
@@ -258,6 +263,7 @@ public class Magento2Client {
 		HttpGet httpGet = new HttpGet(urlBuilder(magentoProperties.get("siteMapUri")));
 		CloseableHttpResponse response = client.getClient().execute(httpGet);
 		MagentoSiteMapXML siteMap = getSerializer().read(MagentoSiteMapXML.class, response.getEntity().getContent());
+		response.close();
 		return siteMap;
 	}
 	
@@ -300,6 +306,7 @@ public class Magento2Client {
 //				System.out.println(entry.getKey() + "=" + entry.getValue());
 //			}
         }
+		response.close();
 		return itemResponse.getAttributes();
 	}
 	

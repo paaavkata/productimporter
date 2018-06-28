@@ -41,15 +41,10 @@ public class MagentoService {
 	}
 	
 	
-	public StatusLine uploadMagentoProduct(MagentoProductRequest magentoProduct){
+	public StatusLine uploadMagentoProduct(MagentoProductRequest magentoProduct) throws Exception{
 		
 		StatusLine status;
-		try {
-			status = magentoClient.newMagentoProduct(magentoProduct);
-		} catch (Exception e) {
-			status = new BasicStatusLine(new ProtocolVersion("http", 1, 1), 500, e.getMessage());
-		}
-		
+		status = magentoClient.newMagentoProduct(magentoProduct);
 		if(status.getStatusCode() == 200) {
 			StockInfoProduct stockInfoProduct = new StockInfoProduct(
 							magentoProduct.getSku(), 
@@ -60,6 +55,21 @@ public class MagentoService {
 							magentoProduct.getExtensionAttributes().getItem().isStock());
 			this.stockInfo.put(stockInfoProduct.getSku(), stockInfoProduct);
 		}
+		
+		if(status.getStatusCode() == 400) {
+			if(status.getReasonPhrase().contains("URL key for specified store already exists.")) {
+				StockInfoProduct stockInfoProduct = new StockInfoProduct(
+						magentoProduct.getSku(), 
+						magentoProduct.getPrice(), 
+						magentoProduct.getStatus(), 
+						magentoProduct.getVisibility(),
+						magentoProduct.getExtensionAttributes().getItem().getQty(),
+						magentoProduct.getExtensionAttributes().getItem().isStock());
+				this.stockInfo.put(stockInfoProduct.getSku(), stockInfoProduct);
+			}
+		}
+		
+		
 		return status;
 	}
 

@@ -134,6 +134,14 @@ public class FieldManipulationHelper {
 			if(name.charAt(i) == ' '){
 				counter++;
 			}
+			if(name.charAt(i) == '(') {
+				for(int j = i; j < name.length(); j++) {
+					if(name.charAt(j) == ')') {
+						i = j+1;
+						break;
+					}
+				}
+			}
 			if(counter > spaces){
 				break;
 			}
