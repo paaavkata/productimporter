@@ -1,10 +1,16 @@
 package bg.premiummobile.productimporter.solytron;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
+import org.apache.http.ProtocolVersion;
 import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.message.BasicStatusLine;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +20,7 @@ import bg.premiummobile.productimporter.domain.StockInfoProduct;
 import bg.premiummobile.productimporter.httpclients.SolytronClient;
 import bg.premiummobile.productimporter.magento.MagentoService;
 import bg.premiummobile.productimporter.magento.model.MagentoProductRequest;
+import bg.premiummobile.productimporter.magento.model.MagentoProductResponse;
 import bg.premiummobile.productimporter.magento.model.MagentoStockItemRequest;
 import bg.premiummobile.productimporter.solytron.model.Image;
 import bg.premiummobile.productimporter.solytron.model.SolytronProduct;
@@ -64,59 +71,108 @@ public class SolytronService {
 			attributeSetId = 12;
 		}
 		
-		int counter = 1;
+		int counter = 0;
 		System.out.println("Total product size: " + solytronProducts.size());
 		for(SolytronProduct solytronProduct : solytronProducts){
 			counter++;
 			System.out.println(counter);
-//			if(counter < 2){
-//				continue;
-//			}
+			if(counter < 134){
+				continue;
+			}
 			String sku = solytronProduct.getCodeId();
 			sku = sku.replaceAll("/", "");
 			sku = sku.replace((char) 92, (char) 0);
 			sku = sku.replace((char) 34, (char) 0);
-			if(magentoService.isProductUploaded(sku)) {
+			MagentoProductResponse magentoProductResponse = magentoService.getProductBySku(sku);
+			if(magentoProductResponse != null) {
 				MagentoStockItemRequest magentoStockItem = mapper.generateStockInfo(solytronProduct.getStockInfoValue());
 				StockInfoProduct stockInfo = new StockInfoProduct(sku, mapper.generatePrice(solytronProduct), 1, 4, magentoStockItem.getQty(), magentoStockItem.isStock());
-				magentoService.updateMagentoProductStockInfo(stockInfo);
+				magentoService.updateMagentoProductStockInfo(stockInfo, magentoProductResponse);
 			}
 			else {
 				long startTime = System.currentTimeMillis();
 				Result result = new Result();
 				solytronProduct = getFullProduct(solytronProduct);
-				MagentoProductRequest magentoProduct = mapper.mapSolytronProduct(solytronProduct, category, magentoCategoriesInner);
-				magentoProduct.setAttributeSetId(attributeSetId);
-				result.setId(magentoProduct.getSku());
+				if(solytronProduct == null){
+					continue;
+				}
+				MagentoProductRequest magentoProductRequest = mapper.mapSolytronProduct(solytronProduct, category, magentoCategoriesInner);
+				magentoProductRequest.setAttributeSetId(attributeSetId);
+				result.setId(magentoProductRequest.getSku());
 				result.setSequenceNumber(counter);
-				result.setName(magentoProduct.getName());
+				result.setName(magentoProductRequest.getName());
 				if(solytronProduct.getImages() != null){
 					result.setPhotos(solytronProduct.getImages().size());
 				} else{
 					result.setPhotos(0);
 				}
-				StatusLine status = magentoService.uploadMagentoProduct(magentoProduct);
-				result.setMagentoUploadStatus(status.getStatusCode());
-				if(status.getStatusCode() == 200) {
-					if(solytronProduct.getImages() != null) {
-						List<String> images = new ArrayList<>();
-						for(Image image : solytronProduct.getImages()){
-							images.add(image.getText());
+				
+				HashMap<BufferedImage, String> solytronImages = new HashMap<>();
+				if(solytronProduct.getImages() != null){
+					for(Image image : solytronProduct.getImages()){
+						
+						String extension = "jpeg";
+						
+						if(image.getText().contains("png")){
+							extension = "png";
 						}
-						List<StatusLine> imageStatusLines = magentoService.uploadMagentoProductImages(images, magentoProduct, "solytron");
-						int success = 0;
-						for(StatusLine line : imageStatusLines) {
-							if(line.getStatusCode() == 200) {
-								success++;
-							}
+						BufferedImage bufferedImage;
+						try{
+							bufferedImage = client.getImage(image.getText());
 						}
-						result.setSuccessfullUploadedPhotos(success);
-					}
+						catch(ClientProtocolException e){
+							System.err.println(e.getMessage());
+							bufferedImage = null;
+						}
+						catch(IOException e){
+							System.err.println(e.getMessage());
+							bufferedImage = null;
+						}
+						
+						if(bufferedImage != null){
+							solytronImages.put(bufferedImage, extension);
+						}
+					}	
 				}
-				result.setTotalTime(System.currentTimeMillis() - startTime);
+				
+				result.setSuccessfullUploadedPhotos(0);
+
+				if(solytronImages.isEmpty()){
+					result.setMagentoUploadStatus(500);
+					result.setTotalTime(System.currentTimeMillis() - startTime);
+					System.err.println("Solytron image list is empty. Aborting upload for product with SKU: " + magentoProductRequest.getSku());
+					System.out.println();
+					System.out.println("==================================================================");
+					continue;
+				}
+				
+				StatusLine status;
+				try{
+					status = magentoService.uploadMagentoProduct(magentoProductRequest);
+				}
+				catch(ClientProtocolException e){
+					System.err.println(e.getMessage());
+					status = new BasicStatusLine(new ProtocolVersion("http", 1, 1), 500, e.getMessage());
+				}
+				catch(IOException e){
+					System.err.println(e.getMessage());
+					status = new BasicStatusLine(new ProtocolVersion("http", 1, 1), 500, e.getMessage());
+				}
+				
+				if(status.getStatusCode() == 200) {
+					int imageCounter = 1;
+					for(Entry<BufferedImage, String> entry : solytronImages.entrySet()){
+						StatusLine imageStatusLine = magentoService.uploadMagentoProductImage(entry.getKey(), entry.getValue(), magentoProductRequest, imageCounter, "solytron");
+						if(imageStatusLine.getStatusCode() == 200) {
+							imageCounter++;
+						}
+					}
+					result.setSuccessfullUploadedPhotos(imageCounter);
+				}
+				
 				results.add(result);
 			}
-			magentoService.saveStockInfo();
+//			magentoService.saveStockInfo();
 			System.out.println();
 			System.out.println("==================================================================");
 //			if(counter >= 10){
@@ -134,7 +190,7 @@ public class SolytronService {
 			fullProduct = client.downloadProduct(simpleProduct.getProductId());
 		}
 		catch(Exception e){
-			System.out.println("Error while downloading product " + simpleProduct.getProductId());
+			System.out.println("Error while downloading product " + simpleProduct.getProductId() + "Exception Message: " + e.getMessage());
 			return null;
 		}
 		fullProduct = fromSimpleToFull(simpleProduct, fullProduct);

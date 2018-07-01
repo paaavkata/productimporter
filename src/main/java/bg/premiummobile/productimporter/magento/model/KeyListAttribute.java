@@ -11,18 +11,23 @@ public class KeyListAttribute extends Attribute{
 	private String attributeCode;
 	@JsonProperty("value")
 	private List<String> value;
+	
+	
 	public String getAttributeCode() {
 		return attributeCode;
 	}
+	
 	public void setAttributeCode(String attributeCode) {
 		this.attributeCode = attributeCode;
 	}
+	
 	public List<String> getValue() {
 		if(value == null){
 			return new ArrayList<String>();
 		}
 		return value;
 	}
+	
 	public void setValue(Object value) {
 		this.value = (List<String>) value;
 	}

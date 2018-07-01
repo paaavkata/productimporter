@@ -1,8 +1,16 @@
 package bg.premiummobile.productimporter.httpclients;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
@@ -84,6 +92,20 @@ public class SolytronClient {
 		httpGet = new HttpGet(builder.build());
 		return httpGet;
 		
+	}
+	
+	public BufferedImage getImage(String urlString) throws ClientProtocolException, IOException{
+		urlString = urlString.replaceAll("\\{", "");
+		urlString = urlString.replaceAll("\\}", "");
+		HttpGet httpGet = new HttpGet(urlString);
+		CloseableHttpResponse response = client.getClient().execute(httpGet);
+		if(response.getStatusLine().getStatusCode() == 200){
+			BufferedImage img = ImageIO.read(response.getEntity().getContent());
+			response.close();
+			return img;
+		} else {
+			return null;
+		}
 	}
 	
 }

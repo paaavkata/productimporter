@@ -1,5 +1,6 @@
 package bg.premiummobile.productimporter.magento;
 
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -17,6 +18,8 @@ import bg.premiummobile.productimporter.configuration.ConfigurationReader;
 import bg.premiummobile.productimporter.domain.StockInfoProduct;
 import bg.premiummobile.productimporter.httpclients.Magento2Client;
 import bg.premiummobile.productimporter.magento.model.MagentoProductRequest;
+import bg.premiummobile.productimporter.magento.model.MagentoProductResponse;
+import bg.premiummobile.productimporter.magento.model.MagentoStockItemFull;
 
 @Service
 public class MagentoService {
@@ -40,51 +43,44 @@ public class MagentoService {
 		this.stockInfo = reader.loadStockInfoProducts();
 	}
 	
+	public MagentoProductResponse getProductBySku(String sku) throws Exception{
+		return magentoClient.getMagentoProductBySku(sku);
+	}
 	
 	public StatusLine uploadMagentoProduct(MagentoProductRequest magentoProduct) throws Exception{
-		
 		StatusLine status;
 		status = magentoClient.newMagentoProduct(magentoProduct);
-		if(status.getStatusCode() == 200) {
-			StockInfoProduct stockInfoProduct = new StockInfoProduct(
-							magentoProduct.getSku(), 
-							magentoProduct.getPrice(), 
-							magentoProduct.getStatus(), 
-							magentoProduct.getVisibility(),
-							magentoProduct.getExtensionAttributes().getItem().getQty(),
-							magentoProduct.getExtensionAttributes().getItem().isStock());
-			this.stockInfo.put(stockInfoProduct.getSku(), stockInfoProduct);
-		}
 		
-		if(status.getStatusCode() == 400) {
-			if(status.getReasonPhrase().contains("URL key for specified store already exists.")) {
-				StockInfoProduct stockInfoProduct = new StockInfoProduct(
-						magentoProduct.getSku(), 
-						magentoProduct.getPrice(), 
-						magentoProduct.getStatus(), 
-						magentoProduct.getVisibility(),
-						magentoProduct.getExtensionAttributes().getItem().getQty(),
-						magentoProduct.getExtensionAttributes().getItem().isStock());
-				this.stockInfo.put(stockInfoProduct.getSku(), stockInfoProduct);
-			}
-		}
+//		if(status.getStatusCode() == 200) {
+//			StockInfoProduct stockInfoProduct = new StockInfoProduct(
+//							magentoProduct.getSku(), 
+//							magentoProduct.getPrice(), 
+//							magentoProduct.getStatus(), 
+//							magentoProduct.getVisibility(),
+//							magentoProduct.getExtensionAttributes().getItem().getQty(),
+//							magentoProduct.getExtensionAttributes().getItem().isStock());
+//			this.stockInfo.put(stockInfoProduct.getSku(), stockInfoProduct);
+//		}
+//		
+//		if(status.getStatusCode() == 400) {
+//			if(status.getReasonPhrase().contains("URL key for specified store already exists.")) {
+//				StockInfoProduct stockInfoProduct = new StockInfoProduct(
+//						magentoProduct.getSku(), 
+//						magentoProduct.getPrice(), 
+//						magentoProduct.getStatus(), 
+//						magentoProduct.getVisibility(),
+//						magentoProduct.getExtensionAttributes().getItem().getQty(),
+//						magentoProduct.getExtensionAttributes().getItem().isStock());
+//				this.stockInfo.put(stockInfoProduct.getSku(), stockInfoProduct);
+//			}
+//		}
 		
 		
 		return status;
 	}
 
-	public List<StatusLine> uploadMagentoProductImages(List<String> imageUrls,	MagentoProductRequest magentoProduct, String provider){
-		int counter = 1;
-		List<StatusLine> statuses = new ArrayList<>();
-		for(String image : imageUrls){
-			try {
-				statuses.add(magentoClient.uploadMagentoImage(magentoProduct, image, counter++, provider));
-			}
-			catch(Exception e) {
-				statuses.add(new BasicStatusLine(new ProtocolVersion("http", 1, 1), 500, "Error"));
-			}
-		}
-		return statuses;
+	public StatusLine uploadMagentoProductImage(BufferedImage image, String extension, MagentoProductRequest magentoProduct, int counter, String provider) throws Exception{
+		return magentoClient.uploadMagentoImage(magentoProduct, image, extension, counter, provider);
 	}
 	
 	public boolean isProductUploaded(String sku) {
@@ -96,8 +92,11 @@ public class MagentoService {
 	}
 	
 	@Async
-	public StatusLine updateMagentoProductStockInfo(StockInfoProduct newStockInfo){
-		StockInfoProduct oldStockInfo = stockInfo.get(newStockInfo.getSku());
+	public StatusLine updateMagentoProductStockInfo(StockInfoProduct newStockInfo, MagentoProductResponse magentoProductResponse){
+		StockInfoProduct oldStockInfo = null;
+		if(magentoProductResponse != null){
+			oldStockInfo = convertStockItem(magentoProductResponse);
+		} 
 		StatusLine status = null;
 		if(isStockChanged(newStockInfo, oldStockInfo)) {
 			try {
@@ -109,12 +108,19 @@ public class MagentoService {
 			if(status.getStatusCode() == 200) {
 				this.stockInfo.put(newStockInfo.getSku(), newStockInfo);
 			}
+		} else {
+			System.out.println("Product has no changes. Skipping update.");
 		}
 		return status;
-		
 	}
 	
-	private boolean isStockChanged(StockInfoProduct newStockInfo, StockInfoProduct oldStockInfo) {
+	private StockInfoProduct convertStockItem(MagentoProductResponse product){
+		MagentoStockItemFull stockItemFull = product.getExtensionAttributes().getStockItem();
+		StockInfoProduct stockInfoProduct = new StockInfoProduct(product.getSku(), product.getPrice(), product.getStatus(), product.getVisibility(), stockItemFull.getQty(), stockItemFull.isInStock());
+		return stockInfoProduct;
+	}
+	
+	public boolean isStockChanged(StockInfoProduct newStockInfo, StockInfoProduct oldStockInfo) {
 		if(null == oldStockInfo){
 			return true;
 		}
@@ -124,8 +130,10 @@ public class MagentoService {
 		if(oldStockInfo.getQty() != newStockInfo.getQty()) {
 			return true;
 		}
-		if(oldStockInfo.getPrice() != newStockInfo.getPrice()) {
-			return true;
+		if(oldStockInfo.getPrice().doubleValue() != newStockInfo.getPrice().doubleValue()) {
+			if(newStockInfo.getPrice().doubleValue() < oldStockInfo.getPrice().doubleValue()){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -161,7 +169,7 @@ public class MagentoService {
         	System.out.println(counter);
         	StockInfoProduct stockInfo = new StockInfoProduct(columns[0], price, 1, 1, qty, isInStock);
         	System.out.println(stockInfo.getSku() + " " + columns[1] + " " + stockInfo.getPrice() + " " + stockInfo.getQty() + " " + stockInfo.getInStock());
-        	statuses.add(this.updateMagentoProductStockInfo(stockInfo).toString());
+        	statuses.add(this.updateMagentoProductStockInfo(stockInfo, null).toString());
 //        	if(counter > 50){break;}
         }
         return statuses;

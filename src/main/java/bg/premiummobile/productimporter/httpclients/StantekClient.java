@@ -1,8 +1,14 @@
 package bg.premiummobile.productimporter.httpclients;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.simpleframework.xml.Serializer;
@@ -13,6 +19,7 @@ import org.springframework.stereotype.Component;
 import bg.premiummobile.productimporter.configuration.ConfigurationReader;
 import bg.premiummobile.productimporter.configuration.HttpClient;
 import bg.premiummobile.productimporter.stantek.model.StantekPriceList;
+import bg.premiummobile.productimporter.stantek.model.StantekProduct;
 
 @Component
 public class StantekClient {
@@ -33,7 +40,7 @@ public class StantekClient {
 		this.serializer = new Persister();
 	}
 	
-	public StantekPriceList getStantekFile(){
+	public List<StantekProduct> getStantekFile(String category) throws IOException{
 		HttpGet httpGet = new HttpGet(stantekProperties.get("url"));
 		CloseableHttpResponse response;
 		try {
@@ -51,7 +58,31 @@ public class StantekClient {
 				e.printStackTrace();
 			}
 		}
-		return priceList;
+		if(!category.equals("ALL")){
+			List<StantekProduct> categoryProducts = new ArrayList<>();
+			for(StantekProduct product : priceList.getProducts()){
+				if(product.getGroup().equals(category)){
+					categoryProducts.add(product);
+				}
+			}
+			response.close();
+			return categoryProducts;
+		} else {
+			response.close();
+			return priceList.getProducts();
+		}
+	}
+	
+	public BufferedImage getImage(String urlString) throws ClientProtocolException, IOException{
+		HttpGet httpGet = new HttpGet(urlString);
+		CloseableHttpResponse response = client.getClient().execute(httpGet);
+		if(response.getStatusLine().getStatusCode() == 200){
+			BufferedImage img = ImageIO.read(response.getEntity().getContent());
+			response.close();
+			return img;
+		} else {
+			return null;
+		}
 	}
 	
 }

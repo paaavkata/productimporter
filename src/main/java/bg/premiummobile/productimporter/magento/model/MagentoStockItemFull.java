@@ -27,11 +27,11 @@ public class MagentoStockItemFull{
 	@JsonProperty("min_qty")
 	private int minQty;
 	@JsonProperty("use_config_min_sale_qty")
-	private int useConfigMinSaleQty;
+	private boolean useConfigMinSaleQty;
 	@JsonProperty("min_sale_qty")
 	private int minSaleQty;
 	@JsonProperty("use_config_max_sale_qty")
-	private int useConfigMaxSaleQty;
+	private boolean useConfigMaxSaleQty;
 	@JsonProperty("max_sale_qty")
 	private int maxSaleQty;
 	@JsonProperty("use_config_backorders")
@@ -51,7 +51,7 @@ public class MagentoStockItemFull{
 	@JsonProperty("enable_qty_increments")
 	private boolean enableQtyIncrements;
 	@JsonProperty("use_config_manage_stock")
-	private int useConfigManageStock;
+	private boolean useConfigManageStock;
 	@JsonProperty("manage_stock")
 	private boolean manageStock;
 	@JsonProperty("low_stock_date")
@@ -99,10 +99,10 @@ public class MagentoStockItemFull{
 	public void setMinQty(int minQty) {
 		this.minQty = minQty;
 	}
-	public int isUseConfigMinSaleQty() {
+	public boolean isUseConfigMinSaleQty() {
 		return useConfigMinSaleQty;
 	}
-	public void setUseConfigMinSaleQty(int useConfigMinSaleQty) {
+	public void setUseConfigMinSaleQty(boolean useConfigMinSaleQty) {
 		this.useConfigMinSaleQty = useConfigMinSaleQty;
 	}
 	public int getMinSaleQty() {
@@ -111,10 +111,10 @@ public class MagentoStockItemFull{
 	public void setMinSaleQty(int minSaleQty) {
 		this.minSaleQty = minSaleQty;
 	}
-	public int isUseConfigMaxSaleQty() {
+	public boolean isUseConfigMaxSaleQty() {
 		return useConfigMaxSaleQty;
 	}
-	public void setUseConfigMaxSaleQty(int useConfigMaxSaleQty) {
+	public void setUseConfigMaxSaleQty(boolean useConfigMaxSaleQty) {
 		this.useConfigMaxSaleQty = useConfigMaxSaleQty;
 	}
 	public int getMaxSaleQty() {
@@ -171,10 +171,10 @@ public class MagentoStockItemFull{
 	public void setEnableQtyIncrements(boolean enableQtyIncrements) {
 		this.enableQtyIncrements = enableQtyIncrements;
 	}
-	public int isUseConfigManageStock() {
+	public boolean isUseConfigManageStock() {
 		return useConfigManageStock;
 	}
-	public void setUseConfigManageStock(int useConfigManageStock) {
+	public void setUseConfigManageStock(boolean useConfigManageStock) {
 		this.useConfigManageStock = useConfigManageStock;
 	}
 	public boolean isManageStock() {

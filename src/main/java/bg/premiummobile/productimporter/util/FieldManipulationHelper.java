@@ -1,8 +1,11 @@
 package bg.premiummobile.productimporter.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -111,22 +114,25 @@ public class FieldManipulationHelper {
 	}
 	
 	public String trimName(String name, int spaces) {
+		List<String> stringsForDeletion = Arrays.asList("WEEKLY", "PROMO BUNDLE","NEW!","Преносим компютър","Tablet","Notebook","Mobile workstation",
+				"Ultrabook","РАЗПРОДАЖБА!","PROMO!", "Hewlett Packard");
+		List<String> specialCharsForDeletion = Arrays.asList("&quot;", "&apos;", "\"");
+		
+		for(String s : stringsForDeletion){
+			if(this.contains(s, name)){
+				name = name.replaceAll(s + " ", "");
+			}
+		}
+		
+		for(String s : specialCharsForDeletion){
+			if(this.contains(s, name)){
+				name = name.replaceAll(s, "");
+			}
+		}
+
 		StringBuilder st = new StringBuilder();
-		name = name.replace("WEEKLY", "");
-		name = name.replace("PROMO BUNDLE", "");
-		name = name.replace("NEW!", "");
-		name = name.replace("NB", "");
-		name = name.replace("Преносим компютър", "");
-		name = name.replace("Tablet","");
-		name = name.replace("Notebook","");
-		name = name.replace("Mobile workstation","");
-		name = name.replace("Ultrabook", "");
-		name = name.replace("РАЗПРОДАЖБА!", "");
-		name = name.replace("PROMO!", "");
-		name = name.replace("&quot", "");
-		name = name.replace("\"", "");
-		name = name.trim();
 		int counter = 0;
+		
 		for(int i = 0; i < name.length(); i++){
 			if(name.charAt(i) == ',' || name.charAt(i) == ';' || name.charAt(i) == (char) 047 || name.charAt(i) == '/'){
 				break;
@@ -137,12 +143,12 @@ public class FieldManipulationHelper {
 			if(name.charAt(i) == '(') {
 				for(int j = i; j < name.length(); j++) {
 					if(name.charAt(j) == ')') {
-						i = j+1;
+						i = j+2;
 						break;
 					}
 				}
 			}
-			if(counter > spaces){
+			if(counter >= spaces){
 				break;
 			}
 			st.append(name.charAt(i));
@@ -179,13 +185,16 @@ public class FieldManipulationHelper {
 	
 	public String generateHddSize(String string) {
 		StringBuilder st = new StringBuilder();
+		if(string == null || string.equals("")){
+			return "500 GB";
+		}
 		for(int i = 0; i < string.length(); i++){
-			if(string.charAt(i) == ' ' || string.charAt(i) == 'T' || string.charAt(i) == 'G'){
+			if(string.charAt(i) == ' ' || string.charAt(i) == 'T' || string.charAt(i) == 'G' || string.charAt(i) == 'M'){
 				break;
 			}
 			st.append(string.charAt(i));
 		}
-		int gb = Integer.parseInt(st.toString());
+		int gb = Integer.valueOf(st.toString());
 		
 		if(gb <= 5){
 			return gb + " TB";
@@ -215,26 +224,37 @@ public class FieldManipulationHelper {
 	
 	public String generateRamFilter(String memory){
 		if(memory != null && !memory.equals("")){
-			memory = memory.trim();
 			StringBuilder st = new StringBuilder();
-			for(int i = 0; i < memory.length(); i++) {
-				if(memory.charAt(i) == ' ' || memory.charAt(i) == 'G') {
-					break;
-				}
-				if(memory.charAt(i) == 'x'){
-					String multiplyier = String.valueOf(memory.charAt(i-1));
-					String ram = new String();
-					for(int j = i + 1; j < memory.length(); j++) {
-						if(memory.charAt(j) > 57 || memory.charAt(j) < 48){
-							break;
-						}
-						ram = ram + memory.charAt(j);
+			memory = memory.trim();
+			if(memory.contains("MB")){
+				for(int i = 0; i < memory.length(); i++) {
+					if(memory.charAt(i) == ' ' || memory.charAt(i) == 'M') {
+						break;
 					}
-					return Integer.valueOf(multiplyier)*Integer.valueOf(ram) + " GB";
+					st.append(memory.charAt(i));
 				}
-				st.append(memory.charAt(i));
+				int memoryInGB = Integer.parseInt(st.toString())/1024;
+				return magentoAttributesReversed.get(memoryInGB + " GB");
+			} else {
+				for(int i = 0; i < memory.length(); i++) {
+					if(memory.charAt(i) == ' ' || memory.charAt(i) == 'G') {
+						break;
+					}
+					if(memory.charAt(i) == 'x'){
+						String multiplyier = String.valueOf(memory.charAt(i-1));
+						String ram = new String();
+						for(int j = i + 1; j < memory.length(); j++) {
+							if(memory.charAt(j) > 57 || memory.charAt(j) < 48){
+								break;
+							}
+							ram = ram + memory.charAt(j);
+						}
+						return Integer.valueOf(multiplyier)*Integer.valueOf(ram) + " GB";
+					}
+					st.append(memory.charAt(i));
+				}
+				return magentoAttributesReversed.get(st.toString() + " GB");
 			}
-			return magentoAttributesReversed.get(st.toString() + " GB");
 		}
 		return magentoAttributesReversed.get("4 GB");
 	}
@@ -257,6 +277,9 @@ public class FieldManipulationHelper {
 	public String generateCpuFilter(String cpuFilter, String cpuFilter2) {
 		if(cpuFilter == null || cpuFilter.equals("")){
 			cpuFilter = cpuFilter2;
+		}
+		if(cpuFilter == null){
+			return magentoAttributesReversed.get("Intel Pentium");
 		}
 		if(this.contains("i7", cpuFilter)){
 			return magentoAttributesReversed.get("Intel Core i7");
@@ -288,10 +311,10 @@ public class FieldManipulationHelper {
 	public List<String> generateLaptopYesNo(String bluetooth, String camera, String ssd, String ssd2, String reader, String fingerprint, String hdmi, 
 			String hdmi2, String onelink, String usb3, String rj45, String sensorscreen, String usbc){
 		List<String> list = new ArrayList<String>();
-		if(bluetooth != null && !bluetooth.contains("No")){
+		if(bluetooth != null && !bluetooth.contains("No") && !camera.contains("Не")){
 			list.add("Bluetooth");
 		}
-		if(camera != null && !camera.contains("No")){
+		if(camera != null && !camera.contains("No") && !camera.contains("Не")){
 			list.add("Камера");
 		}
 		if(ssd != null && (ssd.contains("SSD") || ssd.contains("ssd") || ssd.contains("Ssd"))){
@@ -300,25 +323,25 @@ public class FieldManipulationHelper {
 		else if(ssd2 != null && (ssd2.contains("SSD") || ssd2.contains("ssd") || ssd2.contains("Ssd"))){
 			list.add("SSD");
 		}
-		if(reader != null && !reader.contains("No")){
+		if(reader != null && !reader.contains("No") && !camera.contains("Не")){
 			list.add("Четец за карти");
 		}
-		if(fingerprint != null && !fingerprint.contains("No")){
+		if(fingerprint != null && !fingerprint.contains("No") && !camera.contains("Не")){
 			list.add("Сензор за отпечатък");
 		}
-		if(hdmi != null && !hdmi.contains("No")){
+		if(hdmi != null && !hdmi.contains("No") && !camera.contains("Не")){
 			list.add("HDMI порт");
 		}
-		else if(hdmi2 != null && !hdmi2.contains("No")){
+		else if(hdmi2 != null && !hdmi2.contains("No") && !camera.contains("Не")){
 			list.add("HDMI порт");
 		}
-		if(onelink != null && !onelink.contains("No")){
+		if(onelink != null && !onelink.contains("No") && !camera.contains("Не")){
 			list.add("OneLink порт");
 		}
 		if(usb3 != null && !usb3.equals("")){
 			list.add("USB 3.0");
 		}
-		if(rj45 != null && !rj45.contains("No")){
+		if(rj45 != null && !rj45.contains("No") && !camera.contains("Не")){
 			list.add("RJ-45 порт");
 		}
 		if(sensorscreen != null && sensorscreen.contains("ouch")){
@@ -437,6 +460,39 @@ public class FieldManipulationHelper {
 			return magentoAttributesReversed.get("над 1500 GB");
 		}
 		return magentoAttributesReversed.get("401-600 GB");
+	}
+	
+	
+	public String mergeStrings(List<String> strings, boolean spacesBetween){
+		StringBuilder st = new StringBuilder();
+		for(String s : strings){
+			if(s != null && !s.equals("")){
+				st.append(s);
+				if(spacesBetween)
+					st.append(" "); 
+			}
+		}
+		return st.toString().trim();
+	}
+
+
+	public Double generateWeight(String first, String second) {
+		StringBuilder st = new StringBuilder();
+		if(first == null){
+			first = second;
+		}
+		
+		if(first == null){
+			return 2.0;
+		}
+		
+		for(int i = 0; i < first.length(); i++){
+			if(first.charAt(i) == ' ' || first.charAt(i) == 'K' || first.charAt(i) == 'k' || first.charAt(i) == 'g'){
+				break;
+			}
+			st.append(first.charAt(i));
+		}
+		return Double.valueOf(st.toString());
 	}
 
 }

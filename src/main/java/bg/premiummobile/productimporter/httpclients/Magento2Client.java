@@ -2,6 +2,7 @@ package bg.premiummobile.productimporter.httpclients;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -39,6 +40,7 @@ import bg.premiummobile.productimporter.magento.model.Attribute;
 import bg.premiummobile.productimporter.magento.model.Category;
 import bg.premiummobile.productimporter.magento.model.ExtensionAttributeRequest;
 import bg.premiummobile.productimporter.magento.model.ItemResponse;
+import bg.premiummobile.productimporter.magento.model.KeyValueAttribute;
 import bg.premiummobile.productimporter.magento.model.MagentoAttribute;
 import bg.premiummobile.productimporter.magento.model.MagentoPostProduct;
 import bg.premiummobile.productimporter.magento.model.MagentoProduct;
@@ -133,27 +135,62 @@ public class Magento2Client {
 		}
 	}
 	
+	public MagentoProductResponse getMagentoProductBySku(String sku) throws Exception{
+		MagentoProductResponse magentoProduct = null;
+		HttpGet httpGet = new HttpGet(this.urlBuilder(magentoProperties.get("product") + "/" + sku));
+		httpGet.addHeader("Authorization", "Bearer " + magentoToken());
+		httpGet.addHeader("Content-Type", "application/json");
+		CloseableHttpResponse response = client.getClient().execute(httpGet);
+		StatusLine statusLine = response.getStatusLine();
+		if(statusLine.getStatusCode() == 200){
+			magentoProduct = om.readValue(response.getEntity().getContent(), MagentoProductResponse.class);
+		}
+		else if(statusLine.getStatusCode() == 404){
+			//TO-DO Some logging for not product not found;
+			
+		}
+		else{
+			//TO-DO Some logging for error;
+		}
+	    response.close();
+	    return magentoProduct;
+	}
 	public StatusLine newMagentoProduct(MagentoProductRequest product) throws Exception{
 		HttpPut httpPut = new HttpPut(this.urlBuilder(magentoProperties.get("product") + "/" + product.getSku()));
 		httpPut.addHeader("Authorization", "Bearer " + magentoToken());
 		httpPut.addHeader("Content-Type", "application/json");
 		MagentoPostProduct postProduct = new MagentoPostProduct();
-		postProduct.setMagentoProduct(generateInitialProduct(product));
-		StringEntity params = new StringEntity(om.writeValueAsString(postProduct), "UTF-8");
+		MagentoProductRequest initial = generateInitialProduct(product);
+		postProduct.setMagentoProduct(initial);
+		String productAsString = om.writeValueAsString(postProduct);
+		StringEntity params = new StringEntity(productAsString, "UTF-8");
 		httpPut.setEntity(params);
 		CloseableHttpResponse response = client.getClient().execute(httpPut);
-		StatusLine statusLine;
-		if(response.getStatusLine().getStatusCode() == 200){
+		StatusLine statusLine = response.getStatusLine();
+		if(statusLine.getStatusCode() == 200){
 			statusLine = updateMagentoProduct(product);
-			response.close();
-			return statusLine;
 		}
 		else{
-			System.out.println(om.writeValueAsString(postProduct));
-		    System.out.println("Product upload error: " + EntityUtils.toString(response.getEntity(), "UTF-8"));
-		    response.close();
+			String message = EntityUtils.toString(response.getEntity(), "UTF-8");
+			response.close();
+			System.err.println("Product upload error: " + message);
+			
+			System.err.println("Failed Product JSON: " + productAsString);
+			
+			if(message.contains("URL key for specified store already exists.")){
+				System.out.println("Retrying with added sku to url_key");
+				List<Attribute> attributes = product.getCustomAttributes();
+				for(int i = 0; i < attributes.size(); i++){
+					if(attributes.get(i).getAttributeCode().equals("url_key")){
+						product.getCustomAttributes().get(i).setValue(product.getCustomAttributes().get(i).getValue() + "-" + product.getSku());
+						break;
+					}
+				}
+				statusLine = newMagentoProduct(product);
+			}
 		}
-		return response.getStatusLine();
+		response.close();
+		return statusLine;
 	}
 	
 	public StatusLine updateMagentoProduct(MagentoProduct product) throws Exception{
@@ -167,12 +204,14 @@ public class Magento2Client {
 		httpPost.addHeader("Authorization", "Bearer " + magentoToken());
 		httpPost.addHeader("Content-Type", "application/json");
 		httpPost.setEntity(params);
-		CloseableHttpResponse response = client.getClient().execute(httpPost);
-		if(response.getStatusLine().getStatusCode() != 200){
-			System.err.println("Product status: " + response.getStatusLine().getStatusCode());
+		StatusLine statusLine = null;
+		try(CloseableHttpResponse response = client.getClient().execute(httpPost)){
+			statusLine = response.getStatusLine();
+			if(statusLine.getStatusCode() != 200){
+				System.err.println("Product status: " + statusLine + " JSON Response: " + response.getEntity().toString());
+			} 
 		}
-		response.close();
-		return response.getStatusLine();
+		return statusLine;
 	}
 	
 	private MagentoProductRequest generateInitialProduct(MagentoProductRequest product) {
@@ -194,6 +233,11 @@ public class Magento2Client {
 //		initial.setMediaGalleryEntries(new ArrayList<MediaGalleryEntry>());
 		initial.setTierPrices(new ArrayList<TierPrice>());
 		initial.setCustomAttributes(new ArrayList<Attribute>());
+		for(Attribute attr : product.getCustomAttributes()){
+			if(attr.getAttributeCode().equals("url_key")){
+				initial.getCustomAttributes().add(attr);
+			}
+		}
 		return initial;
 	}
 	
@@ -310,18 +354,10 @@ public class Magento2Client {
 		return itemResponse.getAttributes();
 	}
 	
-	public StatusLine uploadMagentoImage(MagentoProductRequest product, String imageUrl, int counter, String provider) throws Exception{
-		URL url = new URL(imageUrl);
-		BufferedImage img = ImageIO.read(url);
+	public StatusLine uploadMagentoImage(MagentoProductRequest product, BufferedImage img, String extension, int counter, String provider) throws Exception{
+
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		
-		String extension;
-		if(imageUrl.contains("png")){
-			extension = "png";
-		}
-		else{
-			extension = "jpeg";
-		}
 		String imageName = product.getSku() + counter + "." + extension;
 		
 		MediaGalleryEntry entry = new MediaGalleryEntry();
@@ -368,9 +404,12 @@ public class Magento2Client {
 		httpPost.setEntity(params);
 		
 		CloseableHttpResponse response = client.getClient().execute(httpPost);
-		
 		StatusLine statusLine = response.getStatusLine();
-		System.out.println("---->Image Upload Status: " + statusLine.getStatusCode());
+		if(statusLine.getStatusCode() != 200){
+			System.err.println("---->Image Upload Status: " + response.getEntity().toString());
+		} else {
+			System.out.println("---->Image Upload Status: " + statusLine.getStatusCode());
+		}
 		
 		baos.close();
 		response.close();
