@@ -1,5 +1,6 @@
 package bg.premiummobile.productimporter.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import bg.premiummobile.productimporter.httpclients.ReplaceTechClient;
 import bg.premiummobile.productimporter.replacetech.ReplaceTechService;
 import bg.premiummobile.productimporter.replacetech.model.Product;
+import bg.premiummobile.productimporter.replacetech.model.ReplaceTechAttribute;
 
 @RestController
 @RequestMapping("/replaceTech")
@@ -34,7 +36,52 @@ public class ReplaceTechController {
 
 
 		List<Product> products = client.getCategory(slug, dimensionGroupId, itemGroupId, vat);
-		service.saveStockInfoProducts(products);
+		List<Product> classAPlus = new ArrayList<>();
+		List<Product> classA = new ArrayList<>();
+		List<Product> classB = new ArrayList<>();
+		List<Product> classCPlus = new ArrayList<>();
+		List<Product> classC = new ArrayList<>();
+		List<Product> brandNew = new ArrayList<>();
+		List<Product> swap = new ArrayList<>();
+		for(Product product : products){
+			for(ReplaceTechAttribute attr : product.getAttributes()){
+				if(attr.getKey().equals("Grade A+")){
+					classAPlus.add(product);
+					break;
+				}
+				if(attr.getKey().equals("Grade A")){
+					classA.add(product);
+					break;
+				}
+				if(attr.getKey().equals("Grade B")){
+					classB.add(product);
+					break;
+				}
+				if(attr.getKey().equals("Grade C+")){
+					classCPlus.add(product);
+					break;
+				}
+				if(attr.getKey().equals("Grade C")){
+					classC.add(product);
+					break;
+				}
+				if(attr.getKey().equals("Brand New")){
+					brandNew.add(product);
+					break;
+				}
+				if(attr.getKey().equals("Swap")){
+					swap.add(product);
+					break;
+				}
+			}
+		}
+		service.saveStockInfoProducts(classAPlus, "Class-A-Plus");
+		service.saveStockInfoProducts(classA, "Class-A");
+		service.saveStockInfoProducts(classB, "Class-B");
+		service.saveStockInfoProducts(classCPlus, "Class-C-Plus");
+		service.saveStockInfoProducts(classC, "Class-C");
+		service.saveStockInfoProducts(swap, "Swap");
+		service.saveStockInfoProducts(brandNew, "Brand-New");
 	}
 	
 	

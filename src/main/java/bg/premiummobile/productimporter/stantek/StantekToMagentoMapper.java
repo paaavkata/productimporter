@@ -138,7 +138,7 @@ public class StantekToMagentoMapper {
 				properties.remove(stantekProperties.get("wifi2")), 
 				properties.remove(stantekProperties.get("wifi3"))), true);
 		
-		customAttributes.add(helper.newKeyValueAttribute("laptop_wifi", !wifi.equals("") ? wifi : "No data");
+		customAttributes.add(helper.newKeyValueAttribute("laptop_wifi", !wifi.equals("") ? wifi : "No data"));
 		
 		customAttributes.add(helper.newKeyValueAttribute("laptop_warranty", helper.mergeStrings(Arrays.asList(properties.remove(stantekProperties.get("warranty")), properties.remove(stantekProperties.get("warranty2"))), true)));
 

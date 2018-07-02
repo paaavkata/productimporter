@@ -20,7 +20,7 @@ public class ReplaceTechService {
 	
 	public static final int DELIVERY_COST = 10;
 	
-	public void saveStockInfoProducts(List<Product> products){
+	public void saveStockInfoProducts(List<Product> products, String name){
 		
 		StringBuilder st = new StringBuilder();
 		
@@ -36,8 +36,8 @@ public class ReplaceTechService {
 		st.append(DELIMITER);
 //		st.append("lock");
 //		st.append(DELIMITER);
-		st.append("visual");
-		st.append(DELIMITER);
+//		st.append("visual");
+//		st.append(DELIMITER);
 		st.append("functional");
 		st.append(DELIMITER);
 		st.append("box");
@@ -54,7 +54,7 @@ public class ReplaceTechService {
 			st.append(DELIMITER);
 			String color = "";
 //			String lock = "";
-			String visual = "";
+//			String visual = "";
 			String functional = "";
 			String box = "";
 			for(ReplaceTechAttribute attr : product.getAttributes()){
@@ -64,9 +64,9 @@ public class ReplaceTechService {
 //				if("Cloud Lock".equals(attr.getKey())){
 //					lock = attr.getValue();
 //				}
-				if("Visual Condition".equals(attr.getKey())){
-					visual = attr.getValue();
-				}
+//				if("Visual Condition".equals(attr.getKey())){
+//					visual = attr.getValue();
+//				}
 				if("Functional Condition".equals(attr.getKey())){
 					functional = attr.getValue();
 				}
@@ -78,7 +78,7 @@ public class ReplaceTechService {
 			st.append(DELIMITER);
 //			st.append(lock);
 //			st.append(DELIMITER);
-			st.append(visual);
+//			st.append(visual);
 			st.append(DELIMITER);
 			st.append(functional);
 			st.append(DELIMITER);
@@ -86,7 +86,7 @@ public class ReplaceTechService {
 			st.append(System.getProperty("line.separator"));
 		}
 		
-		writeDataToFile(st.toString());
+		writeDataToFile(st.toString(), name);
 		
 	}
 	
@@ -101,9 +101,9 @@ public class ReplaceTechService {
 		return newPrice;
 	}
 	
-	private void writeDataToFile(String data){
+	private void writeDataToFile(String data, String name){
 		
-		File file = new File("ReplaceTechStock.csv");
+		File file = new File(name + ".csv");
 		
 		if(!file.exists() && !file.isDirectory()){
 			try {
