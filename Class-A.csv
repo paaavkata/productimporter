@@ -1,2 +1,322 @@
-name,price,color,functional,box
+name,retailPrice,customerPrice,qty,color,functional,box
+Alcatel Idol Alpha 6032X,174.64,188.16,1,Grey,Working,Boxed
+Alcatel One touch 1050D,33.519999999999996,47.04,2,Black,Working,Unboxed
+Alcatel One Touch 2050X,38.224000000000004,51.74399999999999,1,Silver,Working,Unboxed
+Alcatel One Touch 7048X,115.84,129.35999999999999,1,Red,Working,Boxed
+Alcatel One Touch S'Pop 4030D,52.336,65.856,1,White,Working,Boxed
+Alcatel Pixi 3 4.5,115.84,129.35999999999999,16,Black,Working,Boxed
+Alcatel Pixi 3 4.5,104.08,117.6,2,Black,Working,Unboxed
+Apple iPhone 4S 16GB,162.88,176.4,3,Black,Working,Unboxed
+Apple iPhone 4S 16GB,162.88,176.4,3,White,Working,Unboxed
+Apple iPhone 4S 8GB,115.84,129.35999999999999,1,White,Working,Unboxed
+Apple iPhone 5 16GB,209.92,223.43999999999997,1,Black,Working,Unboxed
+Apple iPhone 5C 8GB,162.88,176.4,1,Pink,Working,Unboxed
+Apple iPhone 5C 8GB,162.88,176.4,1,White,Working,Unboxed
+Apple iPhone 5S 16GB,256.96,270.48,1,Gold,Working,Unboxed
+Apple iPhone 6 16GB,398.08,411.59999999999997,4,Grey,Working,Unboxed
+Apple iPhone 6 64GB,492.15999999999997,505.67999999999995,2,Silver,Working,Unboxed
+Apple iPhone 6 64GB,492.15999999999997,505.67999999999995,1,Grey,Working,Unboxed
+Apple iPhone 6 64GB,492.15999999999997,505.67999999999995,1,Gold,Working,Unboxed
+Apple iPhone 6 Plus 16GB,586.24,599.76,1,Silver,Working,Unboxed
+Apple iPhone 6 Plus 16GB,586.24,599.76,2,Grey,Working,Unboxed
+Apple iPhone 6 Plus 16GB,586.24,599.76,2,Gold,Working,Unboxed
+Apple iPhone 6S 16GB,468.64,482.15999999999997,2,Rose Gold,Working,Unboxed
+Apple iPhone 6S 32GB,527.4399999999999,540.96,30,Grey,Working,Unboxed
+Apple iPhone 6S 32GB,10.0,23.52,1,Grey,Minor Fault,Unboxed
+Apple iPhone 6S Plus 16GB,621.52,635.0400000000001,6,Gold,Working,Boxed
+Apple iPhone 6S Plus 16GB,574.4799999999999,588.0,6,Gold,Working,Unboxed
+Apple iPhone 7 32GB,856.72,870.2399999999999,8,Rose Gold,Working,Unboxed
+Apple iPhone 7 Plus 32GB,1021.3599999999999,1034.8799999999999,1,Rose Gold,Working,Unboxed
+Apple iPhone 7 Plus 32GB,1021.3599999999999,1034.8799999999999,1,Black,Working,Unboxed
+Apple iPhone 7 Plus 32GB,1021.3599999999999,1034.8799999999999,2,Gold,Working,Unboxed
+Apple iPhone 8 256GB,1374.1599999999999,1387.68,3,Gold,Working,Unboxed
+Apple iPhone 8 Plus 256GB,1609.36,1622.8799999999999,3,Silver,Working,Unboxed
+Apple iPhone 8 Plus 256GB,1609.36,1622.8799999999999,8,Grey,Working,Unboxed
+Apple iPhone 8 Plus 256GB,1609.36,1622.8799999999999,2,Gold,Working,Unboxed
+Apple iPhone SE 128GB,609.76,623.28,1,Rose Gold,Working,Unboxed
+Apple iPhone SE 16GB,339.28,352.8,3,Grey,Working,Unboxed
+Apple iPhone SE 32GB,409.84,423.36,6,Rose Gold,Working,Unboxed
+Apple iPhone SE 64GB,475.69599999999997,489.216,1,Rose Gold,Working,Unboxed
+Apple iPhone X 256GB,2020.9599999999998,2034.4799999999998,3,Silver,Working,Unboxed
+Apple iPhone X 256GB,2068.0,2081.52,4,Grey,Working,Boxed
+Apple iPhone X 256GB,2020.9599999999998,2034.4799999999998,5,Grey,Working,Unboxed
+Blackberry Leap,73.50399999999999,87.02399999999999,1,Black,Minor Fault,Unboxed
+CAT B15Q,174.64,188.16,2,Black,Working,Unboxed
+CAT B30,68.8,82.32,13,Black,Working,Boxed
+CAT S60,692.0799999999999,705.6,4,Black,Working,Boxed
+Doro 5031,24.112000000000002,37.632,1,Red,Working,Unboxed
+Doro 516,28.816,42.336,2,Black,Working,Unboxed
+Doro 520X,38.224000000000004,51.74399999999999,1,Black,Working,Unboxed
+Doro 530X,42.928,56.448,1,Silver,Working,Unboxed
+Doro 530X,42.928,56.448,130,Black,Working,Unboxed
+Doro 530X,42.928,56.448,2,Grey,Working,Unboxed
+Doro 540X,115.84,129.35999999999999,1,Black,Working,Boxed
+Doro 540X,104.08,117.6,3,Black,Working,Unboxed
+Doro 5516,57.04,70.55999999999999,1,Black,Working,Boxed
+Doro 5516,49.984,63.504,2,Black,Working,Unboxed
+Doro 5516,57.04,70.55999999999999,1,Grey,Working,Boxed
+Doro 5516,49.984,63.504,3,Grey,Working,Unboxed
+Doro 6030,47.632,61.152,1,Grey,Working,Unboxed
+Doro 6050,68.8,82.32,2,Black,Working,Unboxed
+Doro 607,49.984,63.504,1,Red,Working,Unboxed
+Doro 609,38.224000000000004,51.74399999999999,1,Black,Working,Unboxed
+Doro 615,40.576,54.096,1,Purple,Working,Unboxed
+Doro 615,40.576,54.096,2,Red,Working,Unboxed
+Doro 621,52.336,65.856,2,Black,Working,Unboxed
+Doro 624,52.336,65.856,1,Red,Working,Unboxed
+Doro 631,75.856,89.376,1,Black,Working,Boxed
+Doro 6521,68.8,82.32,1,Grey,Working,Boxed
+Doro 6521,57.04,70.55999999999999,1,Grey,Working,Unboxed
+Doro 740,68.8,82.32,3,Black,Working,Unboxed
+Doro 8020X,139.35999999999999,152.88,2,Black,Working,Boxed
+Doro 8030,139.35999999999999,152.88,2,Black,Working,Boxed
+Doro 8030,120.544,134.064,24,Black,Working,Unboxed
+Doro 8040,186.4,199.92,4,Black,Working,Unboxed
+Doro 810 Liberto,80.55999999999999,94.08,1,Black,Working,Unboxed
+Doro 820 Liberto,198.16,211.68,5,Black,Working,Boxed
+Doro 820 Liberto,174.64,188.16,1,Black,Working,Unboxed
+Doro 825 Liberto,233.43999999999997,246.95999999999998,7,Black,Working,Boxed
+Doro 825 Liberto,209.92,223.43999999999997,2,Black,Working,Unboxed
+General Mobile GM 6,233.43999999999997,246.95999999999998,2,Grey,Working,Boxed
+General Mobile GM 6,233.43999999999997,246.95999999999998,1,White,Working,Boxed
+General Mobile GM 6,233.43999999999997,246.95999999999998,1,Gold,Working,Boxed
+HTC 7 Trophy,49.984,63.504,2,Black,Working,Boxed
+HTC Desire 510,104.08,117.6,1,Black,Working,Unboxed
+HTC Desire 620,115.84,129.35999999999999,2,Grey,Working,Boxed
+HTC Desire C,57.04,70.55999999999999,1,Red,Working,Unboxed
+HTC HD Mini,40.576,54.096,1,Black,Working,Unboxed
+HTC One (M7),167.58399999999997,181.10399999999998,1,Silver,Working,Unboxed
+HTC One (M8s),256.96,270.48,3,Grey,Working,Boxed
+HTC One (M8s),233.43999999999997,246.95999999999998,12,Grey,Working,Unboxed
+HTC One A9 16GB,327.52000000000004,341.03999999999996,4,Grey,Working,Boxed
+HTC One A9 16GB,304.0,317.52000000000004,8,Grey,Working,Unboxed
+HTC One Mini,162.88,176.4,1,Silver,Working,Boxed
+HTC One Mini,115.84,129.35999999999999,1,Silver,Minor Fault,Boxed
+HTC One SV,10.0,23.52,1,White,Working,Boxed
+HTC TyTN II,28.816,42.336,1,Black,Working,Unboxed
+HTC Windows Phone 8S,59.391999999999996,72.91199999999999,1,Blue,Working,Unboxed
+HTC Windows Phone 8S,59.391999999999996,72.91199999999999,1,Black,Working,Unboxed
+Huawei Ascend P7,198.16,211.68,1,Black,Working,Boxed
+Huawei Ascend P7,174.64,188.16,1,Black,Working,Unboxed
+Huawei Ascend Y600,104.08,117.6,1,Black,Working,Boxed
+Huawei Honor 6 H60-L04,256.96,270.48,2,White,Working,Boxed
+Huawei Honor 7,245.2,258.71999999999997,3,Silver,Working,Boxed
+Huawei Mate 10 Pro 128GB,821.4399999999999,834.9599999999999,1,Grey,Working,Unboxed
+Huawei Mate 10 Pro 128GB Dual Sim,880.2399999999999,893.7599999999999,1,Brown,Working,Boxed
+Huawei Mate 9 Pro 128gb,786.16,799.68,2,Grey,Working,Boxed
+Huawei Mate 9 Pro 128gb,750.88,764.4,2,Grey,Working,Unboxed
+Huawei Mate 9 Pro 128gb,786.16,799.68,4,Gold,Working,Boxed
+Huawei Mate 9 Pro 128gb,750.88,764.4,7,Gold,Working,Unboxed
+Huawei P10 32GB Dual (VTR-L29),562.7199999999999,576.24,1,Black,Working,Unboxed
+Huawei P10 64GB Dual (VTR-L29),633.28,646.8,2,Silver,Working,Boxed
+Huawei P10 64GB Dual (VTR-L29),633.28,646.8,1,Gold,Working,Boxed
+Huawei P10 Plus 64GB (VKY-L09),645.0400000000001,658.56,8,Black,Working,Unboxed
+Huawei P20 Lite 64GB DS,515.68,529.1999999999999,1,Black,Working,Boxed
+Huawei P9 32GB (EVA-L09),362.8,376.32,1,Silver,Working,Unboxed
+Huawei P9 32GB (EVA-L09),398.08,411.59999999999997,2,Grey,Working,Boxed
+Huawei P9 32GB (EVA-L09),362.8,376.32,18,Grey,Working,Unboxed
+Huawei P9 32GB (EVA-L09),362.8,376.32,1,White,Working,Unboxed
+Huawei P9 Plus VIE-L09,492.15999999999997,505.67999999999995,3,Grey,Working,Unboxed
+Huawei Y5 II,151.11999999999998,164.64,1,White,Working,Boxed
+Huawei Y6,139.35999999999999,152.88,2,Black,Working,Boxed
+LG G3 S D722,198.16,211.68,2,Gold,Working,Boxed
+LG G4 H815,240.49599999999998,254.016,3,Grey,Working,Unboxed
+LG G4 Stylus H635,221.68,235.2,1,Silver,Working,Boxed
+LG G5 H850,327.52000000000004,341.03999999999996,1,Gold,Working,Unboxed
+LG G5 SE,386.32,399.84,1,Grey,Working,Unboxed
+LG K4,108.78399999999999,122.304,4,Black,Working,Unboxed
+LG Leon LTE H340N,115.84,129.35999999999999,1,Grey,Working,Unboxed
+LG Nexus 5X 16GB,304.0,317.52000000000004,1,White,Working,Unboxed
+LG Spirit LTE H440N,151.11999999999998,164.64,1,Black,Working,Boxed
+LG V10,550.96,564.4799999999999,2,Black,Working,Boxed
+Marshall London KB-1501,268.71999999999997,282.23999999999995,9,Black,Working,Boxed
+Marshall London KB-1501,221.68,235.2,4,Black,Working,Unboxed
+Microsoft Lumia 435,57.04,70.55999999999999,1,Green,Working,Boxed
+Microsoft Lumia 532,45.279999999999994,58.8,1,Blue,Working,Unboxed
+Microsoft Lumia 532,45.279999999999994,58.8,3,Black,Working,Unboxed
+Microsoft Lumia 532,45.279999999999994,58.8,1,Orange,Working,Unboxed
+Microsoft Lumia 535,80.55999999999999,94.08,1,Black,Working,Unboxed
+Microsoft Lumia 535,80.55999999999999,94.08,7,Green,Working,Unboxed
+Microsoft Lumia 550,104.08,117.6,1,White,Working,Boxed
+Microsoft Lumia 640 LTE,97.02399999999999,110.544,1,Black,Working,Unboxed
+Microsoft Lumia 640 LTE,97.02399999999999,110.544,3,White,Working,Unboxed
+Microsoft Lumia 640 LTE Dual Sim,111.136,124.65599999999999,1,Blue,Working,Unboxed
+Microsoft Lumia 640 LTE Dual Sim,127.6,141.11999999999998,1,Black,Working,Boxed
+Microsoft Lumia 640 XL,158.176,171.69599999999997,1,Black,Working,Boxed
+Microsoft Lumia 640 XL,139.35999999999999,152.88,3,Black,Working,Unboxed
+Microsoft Lumia 640 XL,158.176,171.69599999999997,1,White,Working,Boxed
+Microsoft Lumia 640 XL,139.35999999999999,152.88,2,White,Working,Unboxed
+Microsoft Lumia 650,127.6,141.11999999999998,3,Black,Working,Unboxed
+Microsoft Lumia 650,127.6,141.11999999999998,1,White,Working,Unboxed
+Microsoft Lumia 950,374.56,388.08,3,Black,Working,Boxed
+Microsoft Lumia 950,351.03999999999996,364.56,12,Black,Working,Unboxed
+Microsoft Lumia 950,209.92,223.43999999999997,2,Black,Minor Fault,Boxed
+Microsoft Lumia 950,198.16,211.68,1,Black,Minor Fault,Unboxed
+Microsoft Lumia 950,374.56,388.08,1,White,Working,Boxed
+Microsoft Lumia 950 Dual Sim,362.8,376.32,2,Black,Working,Unboxed
+Microsoft Lumia 950 XL,480.4,493.91999999999996,1,Black,Working,Boxed
+Microsoft Lumia 950 XL,445.11999999999995,458.64,2,Black,Working,Unboxed
+Microsoft Lumia 950 XL,480.4,493.91999999999996,1,White,Working,Boxed
+Motorola Defy Mini XT320,10.0,23.52,3,Black,Working,Boxed
+Motorola Defy Mini XT320,33.519999999999996,47.04,2,Black,Working,Unboxed
+Motorola Moto G4 16GB,198.16,211.68,1,Black,Working,Boxed
+Motorola Moto G4 16GB Dual,202.864,216.384,1,Black,Working,Boxed
+Motorola Moto G4 Play,162.88,176.4,4,Black,Working,Unboxed
+Motorola Motorola Moto Z Play Dual Sim,386.32,399.84,1,Black,Working,Boxed
+Motorola Nexus 6 64GB XT1100,374.56,388.08,2,Blue,Working,Boxed
+Nokia 3310 (2017) Dual TA-1030,68.8,82.32,1,Blue,Working,Unboxed
+Nokia 3310 (2017) Dual TA-1030,80.55999999999999,94.08,1,Grey,Working,Boxed
+Nokia 3310 (2017) Dual TA-1030,68.8,82.32,1,Orange,Working,Unboxed
+Nokia 603,42.928,56.448,1,Black,Working,Unboxed
+Nokia 8 64GB,480.4,493.91999999999996,1,Grey,Working,Unboxed
+Nokia 8 64GB Dual,539.1999999999999,552.7199999999999,1,Blue,Working,Boxed
+Nokia 8 64GB Dual,539.1999999999999,552.7199999999999,6,Grey,Working,Boxed
+Nokia 8 64GB Dual,503.91999999999996,517.4399999999999,4,Grey,Working,Unboxed
+Nokia Asha 503,59.391999999999996,72.91199999999999,2,Yellow,Working,Boxed
+Nokia Asha 503,52.336,65.856,1,Yellow,Working,Unboxed
+Nokia E5,57.04,70.55999999999999,1,Black,Working,Unboxed
+Nokia Lumia 520,68.8,82.32,2,Black,Working,Unboxed
+Nokia Lumia 520,80.55999999999999,94.08,1,Yellow,Working,Boxed
+Nokia Lumia 625,57.04,70.55999999999999,1,Black,Working,Unboxed
+Nokia Lumia 625,57.04,70.55999999999999,3,White,Working,Unboxed
+Nokia Lumia 630,71.152,84.672,1,Black,Working,Boxed
+Nokia Lumia 630,71.152,84.672,2,Green,Working,Boxed
+Nokia Lumia 630,71.152,84.672,1,Orange,Working,Boxed
+Nokia Lumia 635,57.04,70.55999999999999,3,White,Working,Unboxed
+Nokia Lumia 635,68.8,82.32,1,Green,Working,Boxed
+Nokia Lumia 635,57.04,70.55999999999999,8,Green,Working,Unboxed
+Nokia Lumia 635,57.04,70.55999999999999,7,Orange,Working,Unboxed
+Nokia Lumia 735,99.376,112.896,4,Black,Working,Unboxed
+Nokia Lumia 820,99.376,112.896,2,Black,Working,Boxed
+Nokia Lumia 830,75.856,89.376,1,White,Minor Fault,Unboxed
+Nokia Lumia 920,127.6,141.11999999999998,5,Black,Working,Boxed
+Nokia Lumia 920,127.6,141.11999999999998,1,Yellow,Working,Boxed
+Nokia Lumia 920,127.6,141.11999999999998,2,Red,Working,Boxed
+Nokia Lumia 920,127.6,141.11999999999998,1,White,Working,Boxed
+Nokia Lumia 930,221.68,235.2,1,Green,Working,Boxed
+Nokia N8,68.8,82.32,1,Black,Working,Unboxed
+OnePlus 5T 128GB,927.28,940.8,1,Black,Working,Boxed
+Panasonic KX-PRXA15EX,127.6,141.11999999999998,1,Black,Working,Boxed
+Samsung Ativ S I8750,113.48799999999999,127.008,2,Silver,Working,Boxed
+Samsung Galaxy A3 (2016) A310F,245.2,258.71999999999997,2,Black,Working,Unboxed
+Samsung Galaxy A3 (2016) A310F,245.2,258.71999999999997,10,Gold,Working,Unboxed
+Samsung Galaxy A3 (2017) A320FL,315.76,329.28,2,Black,Working,Boxed
+Samsung Galaxy A3 (2017) A320FL,280.48,294.0,1,Gold,Working,Unboxed
+Samsung Galaxy A3 A300FU,174.64,188.16,12,Black,Working,Unboxed
+Samsung Galaxy A5 (2016) A510F,339.28,352.8,1,Black,Working,Unboxed
+Samsung Galaxy A5 (2016) A510F,374.56,388.08,1,Gold,Working,Boxed
+Samsung Galaxy A5 (2016) A510F,339.28,352.8,2,Gold,Working,Unboxed
+Samsung Galaxy A5 (2017) 32GB A520F,421.59999999999997,435.11999999999995,1,Black,Working,Boxed
+Samsung Galaxy A5 (2017) 32GB A520F,421.59999999999997,435.11999999999995,1,Gold,Working,Boxed
+Samsung Galaxy A5 A500FU,231.088,244.608,2,White,Working,Unboxed
+Samsung Galaxy Core Plus G3500,115.84,129.35999999999999,1,White,Working,Unboxed
+Samsung Galaxy Core Prime Value Edition G361F,10.0,23.52,1,Grey,Working,Unboxed
+Samsung Galaxy Express i8730,139.35999999999999,152.88,1,White,Working,Unboxed
+Samsung Galaxy Fame S6810,82.91199999999999,96.432,11,White,Working,Unboxed
+Samsung Galaxy J3 (2016) 8GB J320FN,198.16,211.68,1,Black,Working,Boxed
+Samsung Galaxy Note 3 N9005,351.03999999999996,364.56,1,Black,Working,Boxed
+Samsung Galaxy S II i9100,115.84,129.35999999999999,1,Black,Working,Unboxed
+Samsung Galaxy S II i9105,115.84,129.35999999999999,1,Blue,Working,Unboxed
+Samsung Galaxy S4 Active i9295,198.16,211.68,2,Grey,Working,Unboxed
+Samsung Galaxy S4 i9500,226.384,239.90399999999997,1,Black,Working,Boxed
+Samsung Galaxy S4 i9505,233.43999999999997,246.95999999999998,1,Black,Working,Boxed
+Samsung Galaxy S4 i9506,233.43999999999997,246.95999999999998,1,Black,Working,Boxed
+Samsung Galaxy S4 i9506,209.92,223.43999999999997,2,Black,Working,Unboxed
+Samsung Galaxy S4 i9515,221.68,235.2,1,Black,Working,Unboxed
+Samsung Galaxy S5 16GB G900F,268.71999999999997,282.23999999999995,1,Blue,Working,Unboxed
+Samsung Galaxy S5 16GB G900F,292.23999999999995,305.76,2,Black,Working,Boxed
+Samsung Galaxy S5 16GB G900F,268.71999999999997,282.23999999999995,1,Black,Working,Unboxed
+Samsung Galaxy S5 16GB G900F,292.23999999999995,305.76,7,White,Working,Boxed
+Samsung Galaxy S5 16GB G900F,268.71999999999997,282.23999999999995,1,Gold,Working,Unboxed
+Samsung Galaxy S5 32GB G900F,304.0,317.52000000000004,1,Gold,Working,Unboxed
+Samsung Galaxy S5 LTE 16GB G901F,198.16,211.68,1,Black,Minor Fault,Unboxed
+Samsung Galaxy S5 LTE 16GB G901F,292.23999999999995,305.76,1,White,Working,Unboxed
+Samsung Galaxy S5 Neo G903F,292.23999999999995,305.76,1,Silver,Working,Boxed
+Samsung Galaxy S5 Neo G903F,292.23999999999995,305.76,2,Black,Working,Boxed
+Samsung Galaxy S5 Neo G903F,268.71999999999997,282.23999999999995,14,Black,Working,Unboxed
+Samsung Galaxy S5 Neo G903F,268.71999999999997,282.23999999999995,1,Grey,Working,Unboxed
+Samsung Galaxy S5 Neo G903F,268.71999999999997,282.23999999999995,3,Gold,Working,Unboxed
+Samsung Galaxy S6 32GB G920,398.08,411.59999999999997,2,Black,Working,Unboxed
+Samsung Galaxy S6 32GB G920,398.08,411.59999999999997,1,Gold,Working,Unboxed
+Samsung Galaxy S6 64GB G920,468.64,482.15999999999997,1,White,Working,Boxed
+Samsung Galaxy S6 Edge 32GB G925,527.4399999999999,540.96,1,Black,Working,Boxed
+Samsung Galaxy S6 Edge 32GB G925,492.15999999999997,505.67999999999995,2,Black,Working,Unboxed
+Samsung Galaxy S6 Edge 32GB G925,492.15999999999997,505.67999999999995,4,Gold,Working,Unboxed
+Samsung Galaxy S6 Edge 32GB G925,315.76,329.28,1,Green,Minor Fault,Boxed
+Samsung Galaxy S6 Edge 64GB G925,515.68,529.1999999999999,1,Black,Working,Unboxed
+Samsung Galaxy S6 Edge 64GB G925,515.68,529.1999999999999,2,White,Working,Unboxed
+Samsung Galaxy S6 Edge 64GB G925,515.68,529.1999999999999,1,Gold,Working,Unboxed
+Samsung Galaxy S7 32GB G930F,586.24,599.76,2,Black,Working,Boxed
+Samsung Galaxy S7 32GB G930F,550.96,564.4799999999999,1,Black,Working,Unboxed
+Samsung Galaxy S7 Edge 32GB G935F,668.56,682.0799999999999,1,Blue,Working,Boxed
+Samsung Galaxy S9 64GB G960F DS,1044.8799999999999,1058.3999999999999,1,Purple,Working,Boxed
+Samsung Galaxy S9 64GB G960F DS,1044.8799999999999,1058.3999999999999,1,Black,Working,Boxed
+Samsung Galaxy S9 Plus 64GB G965F DS,1280.0800000000002,1293.6,1,Purple,Working,Boxed
+Samsung Galaxy Trend S7560,104.08,117.6,1,Black,Working,Boxed
+Samsung Galaxy Xcover 2 S7710,99.376,112.896,1,Red,Working,Unboxed
+Samsung Galaxy Xcover 2 S7710,99.376,112.896,1,Grey,Working,Unboxed
+Samsung Galaxy Xcover 4 G390F,304.0,317.52000000000004,1,Black,Working,Boxed
+Samsung Galaxy Xcover 4 G390F,280.48,294.0,1,Black,Working,Unboxed
+Samsung Galaxy Xcover S5690,73.50399999999999,87.02399999999999,3,Copper,Working,Unboxed
+Samsung Galaxy Xcover S5690,73.50399999999999,87.02399999999999,1,Grey,Working,Unboxed
+Sony Ericsson Cedar,33.519999999999996,47.04,1,Black,Working,Unboxed
+Sony Ericsson Xperia X8,45.279999999999994,58.8,1,Black,Working,Unboxed
+Sony Ericsson Z310,31.168,44.688,1,Pink,Working,Unboxed
+Sony Xperia E5,139.35999999999999,152.88,1,Black,Working,Unboxed
+Sony Xperia L1,188.752,202.272,1,Black,Working,Unboxed
+Sony Xperia M2,127.6,141.11999999999998,1,Black,Working,Boxed
+Sony Xperia M4 Aqua,162.88,176.4,1,Pink,Working,Boxed
+Sony Xperia T3,193.456,206.97599999999997,1,Purple,Working,Boxed
+Sony Xperia T3,193.456,206.97599999999997,1,White,Working,Boxed
+Sony Xperia X 32GB,268.71999999999997,282.23999999999995,9,Lime,Working,Boxed
+Sony Xperia X 32GB,233.43999999999997,246.95999999999998,6,Lime,Working,Unboxed
+Sony Xperia X 32GB,268.71999999999997,282.23999999999995,1,Black,Working,Boxed
+Sony Xperia X 32GB,233.43999999999997,246.95999999999998,1,Black,Working,Unboxed
+Sony Xperia X Performance,327.52000000000004,341.03999999999996,4,Lime,Working,Unboxed
+Sony Xperia X Performance,362.8,376.32,26,Black,Working,Boxed
+Sony Xperia X Performance,327.52000000000004,341.03999999999996,4,Black,Working,Unboxed
+Sony Xperia X Performance,327.52000000000004,341.03999999999996,3,White,Working,Unboxed
+Sony Xperia XA,186.4,199.92,1,Black,Working,Boxed
+Sony Xperia XA,162.88,176.4,1,Black,Working,Unboxed
+Sony Xperia XA1,233.43999999999997,246.95999999999998,1,White,Working,Unboxed
+Sony Xperia XA1,256.96,270.48,1,Gold,Working,Boxed
+Sony Xperia XZ 32GB,398.08,411.59999999999997,21,Blue,Working,Boxed
+Sony Xperia XZ 32GB,374.56,388.08,25,Blue,Working,Unboxed
+Sony Xperia XZ 32GB,374.56,388.08,1,Silver,Working,Unboxed
+Sony Xperia XZ 32GB,374.56,388.08,3,Black,Working,Unboxed
+Sony Xperia XZ Premium 64GB,692.0799999999999,705.6,1,Pink,Working,Boxed
+Sony Xperia XZ Premium 64GB,668.56,682.0799999999999,32,Silver,Working,Unboxed
+Sony Xperia XZ Premium 64GB,668.56,682.0799999999999,6,Black,Working,Unboxed
+Sony Xperia XZ1,503.91999999999996,517.4399999999999,2,Blue,Working,Unboxed
+Sony Xperia XZ1,503.91999999999996,517.4399999999999,1,Silver,Working,Unboxed
+Sony Xperia XZ1 Compact,550.96,564.4799999999999,8,Blue,Working,Boxed
+Sony Xperia XZ1 Compact,550.96,564.4799999999999,3,Pink,Working,Boxed
+Sony Xperia XZ1 Compact,550.96,564.4799999999999,5,Silver,Working,Boxed
+Sony Xperia XZ1 Compact,550.96,564.4799999999999,5,Black,Working,Boxed
+Sony Xperia XZ1 Compact,515.68,529.1999999999999,6,Black,Working,Unboxed
+Sony Xperia XZ2 DS,1103.6799999999998,1117.2,1,Black,Working,Boxed
+Sony Xperia XZs 32gb,527.4399999999999,540.96,1,Blue,Working,Boxed
+Sony Xperia XZs 32gb,527.4399999999999,540.96,9,Black,Working,Boxed
+Sony Xperia XZs 32gb,492.15999999999997,505.67999999999995,1,Black,Working,Unboxed
+Sony Xperia Z2,162.88,176.4,1,White,Working,Unboxed
+Sony Xperia Z3+,256.96,270.48,2,Copper,Working,Boxed
+Sony Xperia Z3+,233.43999999999997,246.95999999999998,11,Copper,Working,Unboxed
+Sony Xperia Z3+,256.96,270.48,1,Black,Working,Boxed
+Sony Xperia Z3+,233.43999999999997,246.95999999999998,6,Black,Working,Unboxed
+Sony Xperia Z3+,256.96,270.48,1,White,Working,Boxed
+Sony Xperia Z3+,233.43999999999997,246.95999999999998,2,White,Working,Unboxed
+Sony Xperia Z3+,256.96,270.48,3,Green,Working,Boxed
+Sony Xperia Z3+,233.43999999999997,246.95999999999998,5,Green,Working,Unboxed
+Sony Xperia Z5,280.48,294.0,1,Black,Working,Unboxed
+Sony Xperia Z5 Compact,304.0,317.52000000000004,2,Black,Working,Boxed
+Sony Xperia Z5 Premium,398.08,411.59999999999997,1,Black,Working,Boxed
+Sony Xperia ZR,10.0,23.52,1,Black,Working,Boxed
+Telme TS100,26.464,39.984,1,Black,Working,Boxed
+Vodafone Smart Mini 7 VFD 300,47.632,61.152,1,Black,Working,Unboxed
+ZTE Axon Elite,362.8,376.32,1,Gold,Working,Boxed
+ZTE Blade V6,139.35999999999999,152.88,2,Grey,Working,Boxed
+ZTE Blade V6,10.0,23.52,1,Grey,Working,Unboxed
+ZTE Blade V7 Lite,139.35999999999999,152.88,1,Silver,Working,Unboxed
+ZTE F320,47.632,61.152,1,Black,Working,Boxed
+ZTE F320,42.928,56.448,1,Black,Working,Unboxed
 

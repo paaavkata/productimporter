@@ -45,32 +45,28 @@ public class ReplaceTechController {
 		List<Product> swap = new ArrayList<>();
 		for(Product product : products){
 			for(ReplaceTechAttribute attr : product.getAttributes()){
-				if(attr.getKey().equals("Grade A+")){
-					classAPlus.add(product);
-					break;
-				}
-				if(attr.getKey().equals("Grade A")){
-					classA.add(product);
-					break;
-				}
-				if(attr.getKey().equals("Grade B")){
-					classB.add(product);
-					break;
-				}
-				if(attr.getKey().equals("Grade C+")){
-					classCPlus.add(product);
-					break;
-				}
-				if(attr.getKey().equals("Grade C")){
-					classC.add(product);
-					break;
-				}
-				if(attr.getKey().equals("Brand New")){
-					brandNew.add(product);
-					break;
-				}
-				if(attr.getKey().equals("Swap")){
-					swap.add(product);
+				if(attr.getKey().equals("Visual Condition")){
+					if(attr.getValue().equals("Grade A+")){
+						classAPlus.add(product);
+					}
+					if(attr.getValue().equals("Grade A")){
+						classA.add(product);
+					}
+					if(attr.getValue().equals("Grade B")){
+						classB.add(product);
+					}
+					if(attr.getValue().equals("Grade C+")){
+						classCPlus.add(product);
+					}
+					if(attr.getValue().equals("Grade C")){
+						classC.add(product);
+					}
+					if(attr.getValue().equals("Brand New")){
+						brandNew.add(product);
+					}
+					if(attr.getValue().equals("Swap")){
+						swap.add(product);
+					}
 					break;
 				}
 			}

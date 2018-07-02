@@ -26,9 +26,11 @@ public class ReplaceTechService {
 		
 		st.append("name");
 		st.append(DELIMITER);
-//		st.append("qty");
-//		st.append(DELIMITER);
-		st.append("price");
+		st.append("retailPrice");
+		st.append(DELIMITER);
+		st.append("customerPrice");
+		st.append(DELIMITER);
+		st.append("qty");
 		st.append(DELIMITER);
 //		st.append("currency");
 //		st.append(DELIMITER);
@@ -46,12 +48,14 @@ public class ReplaceTechService {
 		for(Product product : products){
 			st.append(product.getName());
 			st.append(DELIMITER);
-//			st.append(product.getQty());
-//			st.append(DELIMITER);
-			st.append(generatePrice(product.getPrice()));
-//			st.append(DELIMITER);
-//			st.append(product.getCurrency());
+			st.append(product.getPrice()*1.96*1.2 + DELIVERY_COST);
 			st.append(DELIMITER);
+			st.append(generatePrice(product.getPrice()));
+			st.append(DELIMITER);
+			st.append(product.getQty());
+			st.append(DELIMITER);
+//			st.append(product.getCurrency());
+//			st.append(DELIMITER);
 			String color = "";
 //			String lock = "";
 //			String visual = "";
@@ -79,7 +83,7 @@ public class ReplaceTechService {
 //			st.append(lock);
 //			st.append(DELIMITER);
 //			st.append(visual);
-			st.append(DELIMITER);
+//			st.append(DELIMITER);
 			st.append(functional);
 			st.append(DELIMITER);
 			st.append(box);
