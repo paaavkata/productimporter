@@ -18,6 +18,8 @@ public class ReplaceTechService {
 	
 	public static final int MARGIN_PERCENTAGE = 15;
 	
+	public static final int EMAG_COMMISSION_PERCENTAGE = 8;
+	
 	public static final int DELIVERY_COST = 10;
 	
 	public void saveStockInfoProducts(List<Product> products, String name){
@@ -26,9 +28,13 @@ public class ReplaceTechService {
 		
 		st.append("name");
 		st.append(DELIMITER);
-		st.append("retailPrice");
+		st.append("priceInWarehouseBGN");
+		st.append(DELIMITER);
+		st.append("Revenue");
 		st.append(DELIMITER);
 		st.append("customerPrice");
+		st.append(DELIMITER);
+		st.append("emagPrice");
 		st.append(DELIMITER);
 		st.append("qty");
 		st.append(DELIMITER);
@@ -48,9 +54,13 @@ public class ReplaceTechService {
 		for(Product product : products){
 			st.append(product.getName());
 			st.append(DELIMITER);
-			st.append(product.getPrice()*1.96*1.2 + DELIVERY_COST);
+			st.append(product.getPrice()*1.96);
+			st.append(DELIMITER);
+			st.append((generatePrice(product.getPrice())/1.2)-(product.getPrice()*1.96)-10);
 			st.append(DELIMITER);
 			st.append(generatePrice(product.getPrice()));
+			st.append(DELIMITER);
+			st.append(generateEmagPriceWithCommission(product.getPrice()));
 			st.append(DELIMITER);
 			st.append(product.getQty());
 			st.append(DELIMITER);
@@ -94,15 +104,28 @@ public class ReplaceTechService {
 		
 	}
 	
-	private double generatePrice(int price){
+	private int generatePrice(int price){
 		
 		double newPrice = price + DELIVERY_COST;
-		
+		int marginPercentage = MARGIN_PERCENTAGE;
 		newPrice *= 1.96;
-		newPrice *= (1 + MARGIN_PERCENTAGE/100);
+		newPrice *= (1 + 0.01*marginPercentage);
 		newPrice *= 1.2;
-		
+		newPrice = prettyPrice(newPrice);
+		return (int) newPrice;
+	}
+	
+	private int prettyPrice(double oldPrice) {
+		int tens = (int) oldPrice/10;
+		int newPrice = tens*10 + 9;
 		return newPrice;
+	}
+
+	private int generateEmagPriceWithCommission(int price){
+		double priceDouble = generatePrice(price);
+		int emagCommision = EMAG_COMMISSION_PERCENTAGE;
+		priceDouble *= (1 + 0.01*emagCommision);
+		return prettyPrice(priceDouble);
 	}
 	
 	private void writeDataToFile(String data, String name){

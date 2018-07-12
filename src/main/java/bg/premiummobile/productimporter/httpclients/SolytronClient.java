@@ -87,8 +87,9 @@ public class SolytronClient {
 			builder.setPath(solytronProperties.get("url.categoryList"));
 		}
 		
-		HttpGet httpGet;
 		builder.setParameter("j_u", solytronProperties.get("username")).setParameter("j_p", solytronProperties.get("password"));
+
+		HttpGet httpGet;
 		httpGet = new HttpGet(builder.build());
 		return httpGet;
 		

@@ -45,7 +45,7 @@ public class ReplaceTechController {
 		List<Product> swap = new ArrayList<>();
 		for(Product product : products){
 			for(ReplaceTechAttribute attr : product.getAttributes()){
-				if(attr.getKey().equals("Visual Condition")){
+				if(attr.getKey().equals("Appearance")){
 					if(attr.getValue().equals("Grade A+")){
 						classAPlus.add(product);
 					}

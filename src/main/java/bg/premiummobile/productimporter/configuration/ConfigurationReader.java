@@ -42,6 +42,7 @@ public class ConfigurationReader {
 	private final String brands = "brands.properties";
 	private final String colors = "colors.properties";
 	private final String replaceTech = "replacetech.properties";
+	private final String asbis = "asbis.properties";
 	
 	private final HashMap<String, String> solytronMap;
 	private final HashMap<String, String> solytronLaptopMap;
@@ -54,6 +55,7 @@ public class ConfigurationReader {
 	private final HashMap<String, String> magentoAttributesMap;
 	private final HashMap<String, String> magentoCategoriesMap;
 	private final HashMap<String, String> replaceTechMap;
+	private final HashMap<String, String> asbisMap;
 	
 	@Autowired
 	public ConfigurationReader(ObjectMapper om){
@@ -69,6 +71,7 @@ public class ConfigurationReader {
 		this.solytronCategoriesMap = load(solytronCategories);
 		this.magentoCategoriesMap = load(magentoCategories);
 		this.replaceTechMap = load(replaceTech);
+		this.asbisMap = load(asbis);
 	}
 	
 
@@ -106,6 +109,10 @@ public class ConfigurationReader {
 	
 	public HashMap<String, String> getMagento(){
 		return magentoMap;
+	}
+	
+	public HashMap<String, String> getAsbis() {
+		return asbisMap;
 	}
 	
 	public HashMap<String, String> getMagentoAttributes(){
@@ -205,4 +212,5 @@ public class ConfigurationReader {
 		}
 		return "Not saved!";
 	}
+
 }
