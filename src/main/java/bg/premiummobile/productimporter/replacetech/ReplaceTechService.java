@@ -109,7 +109,11 @@ public class ReplaceTechService {
 		double newPrice = price + DELIVERY_COST;
 		int marginPercentage = MARGIN_PERCENTAGE;
 		newPrice *= 1.96;
-		newPrice *= (1 + 0.01*marginPercentage);
+		if(newPrice * (1 + 0.01*marginPercentage) > 100){
+			newPrice += 100;
+		} else {
+			newPrice *= (1 + 0.01*marginPercentage);
+		}
 		newPrice *= 1.2;
 		newPrice = prettyPrice(newPrice);
 		return (int) newPrice;
